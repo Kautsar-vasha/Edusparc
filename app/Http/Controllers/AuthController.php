@@ -16,26 +16,44 @@ class AuthController extends Controller
     }
 
     public function login(Request $request) {
-        // 1. Cek Admin (Tabel users)
+        // 1. Cek Admin / Super Admin (Tabel users)
+        //    Role diambil langsung dari kolom 'role' di database,
+        //    bukan di-hardcode, sehingga 'super_admin' bisa terbaca.
         $admin = User::where('username', $request->username)->first();
         if ($admin && Hash::check($request->password, $admin->password)) {
-            // Tambahkan username ke session
-            Session::put(['role' => 'admin', 'user_id' => $admin->id, 'name' => $admin->name, 'username' => $admin->username]);
+            Session::put([
+                'role'     => $admin->role, // ✅ ambil dari DB, bukan hardcode 'admin'
+                'user_id'  => $admin->id,
+                'name'     => $admin->name,
+                'username' => $admin->username,
+            ]);
+
+            // Arahkan super_admin & admin ke dashboard yang sama
             return redirect('/dashboard-admin');
         }
 
         // 2. Cek Guru (Tabel teachers)
         $teacher = Teacher::where('username', $request->username)->first();
         if ($teacher && Hash::check($request->password, $teacher->password)) {
-            // Tambahkan username ke session
-            Session::put(['role' => 'guru', 'user_id' => $teacher->id, 'name' => $teacher->name, 'username' => $teacher->username]);
+            Session::put([
+                'role'     => 'guru',
+                'user_id'  => $teacher->id,
+                'name'     => $teacher->name,
+                'username' => $teacher->username,
+            ]);
             return redirect('/dashboard-guru');
         }
 
         // 3. Cek Orang Tua (NISN & Tgl Lahir)
-        $student = Student::where('nisn', $request->username)->where('birth_date', $request->password)->first();
+        $student = Student::where('nisn', $request->username)
+                          ->where('birth_date', $request->password)
+                          ->first();
         if ($student) {
-            Session::put(['role' => 'ortu', 'user_id' => $student->id, 'name' => $student->name]);
+            Session::put([
+                'role'    => 'ortu',
+                'user_id' => $student->id,
+                'name'    => $student->name,
+            ]);
             return redirect('/dashboard-ortu');
         }
 

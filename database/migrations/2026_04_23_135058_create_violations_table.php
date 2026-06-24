@@ -11,11 +11,12 @@ return new class extends Migration
      */
    public function up(): void
     {
-        Schema::create('violations', function (Blueprint $table) {
+       Schema::create('violations', function (Blueprint $table) {
             $table->id();
             $table->foreignId('student_id')->constrained()->onDelete('cascade');
+            $table->enum('jenis_poin', ['positif', 'negatif'])->default('negatif'); // Tambahan Baru
             $table->string('type');
-            $table->enum('category', ['Administratif', 'Etika/Perilaku']);
+            $table->enum('category', ['Administratif', 'Etika/Perilaku', 'Prestasi/Kebaikan']); // Tambah kategori
             $table->integer('points');
             $table->text('description')->nullable();
             $table->text('motivation')->nullable();

@@ -14,47 +14,55 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 
 class ReportController extends Controller
 {
+    // 1. LAPORAN SELURUH GURU
     public function cetakGuru($format) {
-        $data = Teacher::select('name', 'username')->get()->toArray();
-        $headers = ['Nama Guru / Tenaga Pendidik', 'Username'];
-        return $this->generateFile('Data Seluruh Guru', $headers, $data, $format, 'Data_Guru');
+        $data = Teacher::select('nip', 'name', 'subject', 'role_tambahan')->get()->toArray();
+        $headers = ['NIP/NUPTK', 'Nama Guru', 'Mata Pelajaran', 'Peran Guru'];
+        return $this->generateFile('Data Seluruh Guru & Tenaga Pendidik', $headers, $data, $format, 'Data_Guru');
     }
 
-    public function cetakKelas($format) {
-        $data = Kelas::select('nama_kelas')->orderBy('nama_kelas')->get()->toArray();
-        $headers = ['Nama Kelas'];
-        return $this->generateFile('Data Kelas EDUSPARC', $headers, $data, $format, 'Data_Kelas');
-    }
-
-    public function cetakSiswa(Request $request) {
+    // 2. LAPORAN DAFTAR SISWA PER KELAS (Urut NISN)
+    public function cetakKelas(Request $request) {
         $format = $request->format;
         $kelas = $request->kelas;
 
         $data = Student::where('class', $kelas)
-                        ->select('name', 'nisn', 'total_points')
-                        ->orderBy('name')
+                        ->select('nisn', 'name', 'total_points')
+                        ->orderBy('nisn', 'asc')
                         ->get()->toArray();
 
-        $headers = ['Nama Siswa', 'NISN', 'Total Poin Pelanggaran'];
-        return $this->generateFile("Data Siswa Kelas $kelas", $headers, $data, $format, "Siswa_Kelas_$kelas");
+        // Teks diperbarui menjadi lebih netral
+        $headers = ['NISN', 'Nama Siswa', 'Total Poin Karakter'];
+        return $this->generateFile("Data Daftar Siswa Kelas $kelas", $headers, $data, $format, "Data_Kelas_$kelas");
     }
 
-    public function cetakPelanggaran($format) {
-        $violations = Violation::with('student')->latest()->get();
-        $data = [];
+    // 3. LAPORAN RIWAYAT INDIVIDU SISWA SPESIFIK
+    public function cetakRiwayat(Request $request) {
+        $format = $request->format;
+        $student_id = $request->student_id;
 
-        foreach($violations as $v) {
-            $data[] = [
-                $v->created_at->format('d/m/Y H:i'),
-                $v->student->name ?? 'Terhapus',
-                $v->student->class ?? '-',
-                $v->type,
-                '+' . $v->points
-            ];
+        $student = Student::findOrFail($student_id);
+        $violations = Violation::where('student_id', $student_id)
+                               ->orderBy('created_at', 'asc')
+                               ->get();
+
+        if ($format === 'excel') {
+            $data = [];
+            foreach($violations as $v) {
+                $data[] = [
+                    $v->created_at->format('d/m/Y H:i'),
+                    $v->type,
+                    $v->motivation ?? '-',
+                    ($v->jenis_poin == 'positif' ? '+' : '-') . $v->points
+                ];
+            }
+            // Teks diperbarui menjadi lebih netral
+            $headers = ['Tanggal Waktu', 'Aktivitas / Perilaku', 'Motivasi', 'Poin'];
+            return Excel::download(new DataExport($data, $headers), "Riwayat_{$student->name}.xlsx");
+        } else {
+            $pdf = Pdf::loadView('laporan.pdf_riwayat', compact('student', 'violations'));
+            return $pdf->download("Riwayat_Karakter_{$student->name}.pdf");
         }
-
-        $headers = ['Tanggal Waktu', 'Nama Siswa', 'Kelas', 'Jenis Pelanggaran', 'Poin'];
-        return $this->generateFile('Riwayat Pelanggaran Siswa', $headers, $data, $format, 'Riwayat_Pelanggaran');
     }
 
     private function generateFile($title, $headers, $data, $format, $filename) {
@@ -68,19 +76,8 @@ class ReportController extends Controller
 }
 
 class DataExport implements FromCollection, WithHeadings {
-    protected $data;
-    protected $headers;
-
-    public function __construct($data, $headers) {
-        $this->data = $data;
-        $this->headers = $headers;
-    }
-
-    public function collection() {
-        return collect($this->data);
-    }
-
-    public function headings(): array {
-        return $this->headers;
-    }
+    protected $data; protected $headers;
+    public function __construct($data, $headers) { $this->data = $data; $this->headers = $headers; }
+    public function collection() { return collect($this->data); }
+    public function headings(): array { return $this->headers; }
 }

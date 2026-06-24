@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login | EDUSPARC SMPN 4 Jember</title>
 
-    <!-- Fonts & Icons -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -16,30 +15,67 @@
         :root {
             --primary: #2563eb;
             --primary-hover: #1d4ed8;
-            --bg-color: #f3f4f6;
             --text-main: #1f2937;
             --text-muted: #6b7280;
         }
 
         body {
             font-family: 'Inter', sans-serif;
-            background-color: var(--bg-color);
             min-height: 100vh;
             display: flex;
             align-items: center;
             margin: 0;
+            position: relative;
+            overflow: hidden; /* Mencegah scroll bar muncul saat gambar membesar */
         }
+
+        /* --- FITUR BACKGROUND GAMBAR & ANIMASI --- */
+        .bg-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -2;
+
+            /* Gunakan gambar online sebagai contoh sementara.
+               Nanti ganti URL ini dengan lokasi gambar aslimu */
+            background: url('{{ asset('images/bg-sekolah.png') }}') no-repeat center center;
+            background-size: cover;
+
+            /* Animasi membesar secara perlahan bolak-balik */
+            animation: zoomBackground 20s infinite alternate linear;
+        }
+
+        /* Overlay hitam kebiruan transparan agar form terbaca jelas */
+        .bg-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: rgba(15, 23, 42, 0.75);
+        }
+
+        /* Keyframes untuk efek zoom */
+        @keyframes zoomBackground {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+        /* ----------------------------------------- */
 
         .login-wrapper {
             width: 100%;
             padding: 20px;
+            z-index: 1; /* Form di atas background */
         }
 
         .login-card {
             background: #ffffff;
             border-radius: 24px;
             border: none;
-            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.1);
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.4); /* Shadow dipertebal karena BG gelap */
             overflow: hidden;
             transition: transform 0.3s ease;
         }
@@ -134,13 +170,23 @@
         }
 
         .footer-text {
-            color: var(--text-muted);
+            color: #e5e7eb; /* Diubah menjadi abu-abu terang agar kontras dengan BG gelap */
             font-size: 0.85rem;
             font-weight: 500;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5); /* Tambahan bayangan teks */
+        }
+
+        /* Efek Hover untuk Link Kembali */
+        .back-link:hover {
+            color: var(--primary) !important;
         }
     </style>
 </head>
 <body>
+
+    <div class="bg-image"></div>
+    <div class="bg-overlay"></div>
+
     <div class="login-wrapper">
         <div class="container">
             <div class="row justify-content-center">
@@ -154,7 +200,6 @@
 
                         <div class="p-4 pt-5 pb-5">
 
-                            <!-- Alert Error Session -->
                             @if(session('error'))
                                 <div class="alert alert-danger d-flex align-items-center mb-4" style="border-radius: 12px; border: none; font-size: 0.85rem;" role="alert">
                                     <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
@@ -165,7 +210,6 @@
                             <form action="/login" method="POST">
                                 @csrf
 
-                                <!-- Username Input -->
                                 <div class="mb-4">
                                     <label class="form-label">Username / NISN</label>
                                     <div class="input-group">
@@ -174,7 +218,6 @@
                                     </div>
                                 </div>
 
-                                <!-- Password Input -->
                                 <div class="mb-5">
                                     <label class="form-label">Password / Tgl Lahir</label>
                                     <div class="input-group">
@@ -184,17 +227,19 @@
                                     <span class="help-text"><i class="bi bi-info-circle me-1"></i>Orang tua gunakan format YYYY-MM-DD</span>
                                 </div>
 
-                                <!-- Submit Button -->
                                 <button type="submit" class="btn btn-primary w-100 shadow-sm">
                                     Masuk ke Sistem <i class="bi bi-box-arrow-in-right ms-2"></i>
                                 </button>
 
+                                <!-- Tombol Kembali ke Beranda -->
+                                <div class="text-center mt-4">
+                                    <a href="/" class="text-decoration-none text-secondary fw-semibold back-link" style="font-size: 0.9rem; transition: 0.2s;">
+                                        <i class="bi bi-arrow-left me-1"></i> Kembali ke Beranda
+                                    </a>
+                                </div>
+
                             </form>
                         </div>
-                    </div>
-
-                    <div class="text-center mt-4 footer-text">
-                        &copy; 2026 EDUSPARC MUDADIDAYA
                     </div>
 
                 </div>
@@ -202,7 +247,6 @@
         </div>
     </div>
 
-    <!-- Bootstrap Bundle JS (Optional if you need components like tooltips/modals) -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

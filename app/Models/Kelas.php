@@ -9,7 +9,7 @@ class Kelas extends Model
 {
     use HasFactory;
 
-    // Menentukan nama tabel (opsional tapi disarankan agar Laravel tidak bingung)
+    // Menentukan nama tabel 
     protected $table = 'kelas';
 
     // Menentukan kolom apa saja yang boleh diisi

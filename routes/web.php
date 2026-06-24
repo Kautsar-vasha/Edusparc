@@ -9,85 +9,142 @@ use App\Http\Controllers\KelasController;
 use App\Models\Student;
 use App\Models\Kelas;
 use App\Models\Violation;
-use App\Models\User;
+use App\Models\Teacher;
 
-// Akses Publik
-Route::get('/', [AuthController::class, 'showLogin'])->name('login');
+// ── AKSES PUBLIK ───────────────────────────────────────────────────────────
+// 1. Halaman Homepage Utama (Front-end)
+Route::get('/', function () {
+    return view('welcome'); // Akan memanggil file welcome.blade.php
+});
+
+// 2. Halaman Login
+Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/logout', [AuthController::class, 'logout']);
 
-// Fungsi untuk mengambil data statistik dan grafik Dashboard
+// ── FUNGSI STATISTIK & GRAFIK DASHBOARD ─────────────────────────────────────
 function getDashboardData() {
-    // Menghitung data grafik 6 bulan terakhir
-    $chart_labels = [];
-    $chart_data = [];
+    $chart_labels       = [];
+    $chart_data_positif = [];
+    $chart_data_negatif = [];
+
+    // Menghitung data grafik tren 6 bulan terakhir
     for ($i = 5; $i >= 0; $i--) {
-        $date = now()->subMonths($i);
+        $date           = now()->subMonths($i);
         $chart_labels[] = $date->format('M');
-        $chart_data[] = Violation::whereMonth('created_at', $date->month)
-                                 ->whereYear('created_at', $date->year)
-                                 ->count();
+
+        // Akumulasi poin kebaikan (positif) per bulan
+        $chart_data_positif[] = Violation::where('jenis_poin', 'positif')
+                                   ->whereMonth('created_at', $date->month)
+                                   ->whereYear('created_at', $date->year)
+                                   ->sum('points');
+
+        // Akumulasi poin pelanggaran (negatif) per bulan
+        $chart_data_negatif[] = Violation::where('jenis_poin', 'negatif')
+                                   ->whereMonth('created_at', $date->month)
+                                   ->whereYear('created_at', $date->year)
+                                   ->sum('points');
     }
 
     return [
-        'total_siswa' => Student::count(),
-        'total_kelas' => Kelas::count(),
-        // Menghitung semua staf (Admin + Guru) agar tidak 0
-        'total_guru' => User::whereIn('role', ['admin', 'guru'])->count(),
-        'kasus_bulan_ini' => Violation::whereMonth('created_at', date('m'))
-                                      ->whereYear('created_at', date('Y'))->count(),
-        'poin_tertinggi' => Student::max('total_points') ?? 0,
+        'total_siswa'       => Student::count(),
+        'total_kelas'       => Kelas::count(),
+        'total_guru'        => Teacher::count(),
+        'kasus_bulan_ini'   => Violation::where('jenis_poin', 'negatif')
+                                        ->whereMonth('created_at', date('m'))
+                                        ->whereYear('created_at', date('Y'))
+                                        ->count(),
+        'poin_tertinggi'    => Student::max('total_points') ?? 0,
+        'poin_terendah'     => Student::min('total_points') ?? 0,
         'aktivitas_terbaru' => Violation::with('student')->latest()->take(5)->get(),
-        'chart_labels' => $chart_labels,
-        'chart_data' => $chart_data,
+        'chart_labels'      => $chart_labels,
+        'chart_data_pos'    => $chart_data_positif,
+        'chart_data_neg'    => $chart_data_negatif,
     ];
 }
 
-// Dashboard Berdasarkan Role
-Route::get('/dashboard-admin', function() {
-    if (session('role') !== 'admin') return redirect('/')->with('error', 'Akses Ditolak!');
+// ── DASHBOARD BERDASARKAN ROLE ──────────────────────────────────────────────
+Route::get('/dashboard-admin', function () {
+    if (!in_array(session('role'), ['admin', 'super_admin'])) {
+        return redirect('/')->with('error', 'Akses Ditolak!');
+    }
     return view('dashboard_guru', getDashboardData());
 });
 
-Route::get('/dashboard-guru', function() {
-    if (session('role') !== 'guru') return redirect('/')->with('error', 'Akses Ditolak!');
+Route::get('/dashboard-guru', function () {
+    if (session('role') !== 'guru') {
+        return redirect('/')->with('error', 'Akses Ditolak!');
+    }
     return view('dashboard_guru', getDashboardData());
 });
 
-Route::get('/dashboard-ortu', function() {
-    if (session('role') !== 'ortu') return redirect('/')->with('error', 'Akses Ditolak!');
+Route::get('/dashboard-ortu', function () {
+    if (session('role') !== 'ortu') {
+        return redirect('/')->with('error', 'Akses Ditolak!');
+    }
     return view('dashboard_ortu');
 });
 
-// Grup Manajemen (Admin & Guru)
+// ── GRUP MANAJEMEN (ADMIN & GURU) ──────────────────────────────
 Route::middleware(['web'])->group(function () {
-    Route::get('/guru', [TeacherController::class, 'index']);
-    Route::get('/guru/create', [TeacherController::class, 'create']);
-    Route::post('/guru', [TeacherController::class, 'store']);
-    Route::get('/guru/{id}', [TeacherController::class, 'show']);
 
-    Route::get('/siswa', [StudentController::class, 'index']);
-    Route::post('/siswa', [StudentController::class, 'store']);
-    Route::get('/siswa/{id}/edit', [StudentController::class, 'edit']);
-    Route::put('/siswa/{id}', [StudentController::class, 'update']);
-    Route::delete('/siswa/{id}', [StudentController::class, 'destroy']);
+    // ── GURU ──────────────────────────────────────────────────────────────────
+    Route::get('/guru',             [TeacherController::class, 'index']);
+    Route::get('/guru/create',      [TeacherController::class, 'create']);
+    Route::post('/guru',            [TeacherController::class, 'store']);
+    Route::post('/guru/import',     [TeacherController::class, 'import']);
+    Route::get('/guru/{id}',        [TeacherController::class, 'show']);
+    Route::delete('/guru/{id}',     [TeacherController::class, 'destroy']);
 
-    Route::get('/pelanggaran', [ViolationController::class, 'index']);
-    Route::post('/pelanggaran', [ViolationController::class, 'store']);
+    //QR CODE
+    Route::get('/siswa/{id}/qr', [App\Http\Controllers\StudentController::class, 'cetakQr']);
+
+    // ── SISWA ─────────────────────────────────────────────────────────────────
+    Route::get('/siswa',            [StudentController::class, 'index']);
+    Route::post('/siswa',           [StudentController::class, 'store']);
+    Route::post('/siswa/import',    [StudentController::class, 'import']);
+    Route::get('/kenaikan-kelas',   [StudentController::class, 'formKenaikan']);
+    Route::post('/kenaikan-kelas',  [StudentController::class, 'prosesKenaikan']);
+
+    // --- FITUR BARU: HAPUS ALUMNI (Harus di atas {id}) ---
+    Route::delete('/siswa/hapus-lulus', [StudentController::class, 'hapusLulus']);
+
+    Route::get('/siswa/{id}/edit',  [StudentController::class, 'edit']);
+    Route::put('/siswa/{id}',       [StudentController::class, 'update']);
+    Route::delete('/siswa/{id}',    [StudentController::class, 'destroy']);
+
+    // ── PELANGGARAN & KEBAIKAN ────────────────────────────────────────────────
+    Route::get('/pelanggaran',      [ViolationController::class, 'index']);
+    Route::post('/pelanggaran',     [ViolationController::class, 'store']);
     Route::delete('/pelanggaran/{id}', [ViolationController::class, 'destroy']);
 
-    Route::get('/kelas', [KelasController::class, 'index']);
-    Route::post('/kelas', [KelasController::class, 'store']);
-    Route::put('/kelas/{id}', [KelasController::class, 'update']);
-    Route::delete('/kelas/{id}', [KelasController::class, 'destroy']);
+    // ── FITUR QUICK SCANNER ─────────────────────────────────────────
+    Route::get('/scanner',                 [ViolationController::class, 'scanner']);
+    Route::post('/scanner/store',          [ViolationController::class, 'storeAjax']);
 
-    // --- PENGATURAN & TEMA ---
-    Route::get('/pengaturan', [App\Http\Controllers\SettingsController::class, 'index']);
+    // ── KELAS ─────────────────────────────────────────────────────────────────
+    Route::get('/kelas',            [KelasController::class, 'index']);
+    Route::post('/kelas',           [KelasController::class, 'store']);
+    Route::put('/kelas/{id}',       [KelasController::class, 'update']);
+    Route::delete('/kelas/{id}',    [KelasController::class, 'destroy']);
+
+    // ── MASTER TATA TERTIB (Khusus Admin) ─────────────────────────────────────
+    Route::get('/tatib',            [\App\Http\Controllers\TatibController::class, 'index']);
+    Route::post('/tatib',           [\App\Http\Controllers\TatibController::class, 'store']);
+    Route::put('/tatib/{id}',       [\App\Http\Controllers\TatibController::class, 'update']);
+    Route::delete('/tatib/{id}',    [\App\Http\Controllers\TatibController::class, 'destroy']);
+
+    Route::post('/tatib/import',    [\App\Http\Controllers\TatibController::class, 'import']);
+    Route::put('/tatib/{id}',       [\App\Http\Controllers\TatibController::class, 'update']);
+    Route::delete('/tatib/{id}',    [\App\Http\Controllers\TatibController::class, 'destroy']);
+
+    // ── PENGATURAN ────────────────────────────────────────────────────────────
+    Route::get('/pengaturan',           [App\Http\Controllers\SettingsController::class, 'index']);
     Route::post('/pengaturan/password', [App\Http\Controllers\SettingsController::class, 'updatePassword']);
 
-    // --- MANAJEMEN LAPORAN ---
-    Route::get('/laporan/guru/{format}', [App\Http\Controllers\ReportController::class, 'cetakGuru']);
-    Route::get('/laporan/kelas/{format}', [App\Http\Controllers\ReportController::class, 'cetakKelas']);
-    Route::get('/laporan/siswa', [App\Http\Controllers\ReportController::class, 'cetakSiswa']);
-    Route::get('/laporan/pelanggaran/{format}', [App\Http\Controllers\ReportController::class, 'cetakPelanggaran']);
+    // ── LAPORAN ───────────────────────────────────────────────────────────────
+    Route::get('/laporan/guru/{format}',  [App\Http\Controllers\ReportController::class, 'cetakGuru']);
+    Route::get('/laporan/kelas',          [App\Http\Controllers\ReportController::class, 'cetakKelas']);
+    Route::get('/laporan/riwayat',        [App\Http\Controllers\ReportController::class, 'cetakRiwayat']);
+
 });
