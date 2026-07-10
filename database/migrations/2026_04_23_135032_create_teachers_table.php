@@ -10,12 +10,15 @@ return new class extends Migration
     {
         Schema::create('teachers', function (Blueprint $table) {
             $table->id();
-            $table->string('nip')->unique(); // NIP/NUPTK
-            $table->string('name'); // Nama lengkap & gelar
+            $table->string('nip')->unique();
+            $table->string('name');
             $table->string('username')->unique();
-            $table->string('subject'); // Mata Pelajaran
-            $table->enum('role_tambahan', ['Guru Mapel', 'Wali Kelas', 'Guru BK'])->default('Guru Mapel'); // Peran tambahan
-            $table->string('phone')->nullable(); // No WhatsApp
+            $table->string('subject');
+
+            // PERUBAHAN: Sekarang pakai string (bukan enum) agar bebas diisi teks apa saja
+            $table->string('role_tambahan')->nullable();
+
+            $table->string('phone')->nullable();
             $table->string('password');
             $table->timestamps();
         });

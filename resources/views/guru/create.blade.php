@@ -31,11 +31,10 @@
 
         <form action="/guru" method="POST">
             @csrf
-
             <div class="row g-4">
                 <div class="col-md-6">
-                    <div>
-                        <label class="form-label text-dark fw-semibold mb-1">NIP / NUPTK <span class="text-danger">*</span></label>
+                    <div class="mb-3">
+                        <label class="text-dark fw-semibold mb-1">NIP / NUPTK <span class="text-danger">*</span></label>
                         <div class="input-group shadow-sm">
                             <span class="input-group-text bg-light border-end-0"><i class="bi bi-upc-scan text-muted"></i></span>
                             <input type="text" name="nip" class="form-control border-start-0 ps-0" placeholder="Masukkan NIP/NUPTK" required>
@@ -44,8 +43,8 @@
                 </div>
 
                 <div class="col-md-6">
-                    <div>
-                        <label class="form-label text-dark fw-semibold mb-1">Nama Lengkap (Berta Gelar) <span class="text-danger">*</span></label>
+                    <div class="mb-3">
+                        <label class="text-dark fw-semibold mb-1">Nama Lengkap (Berta Gelar) <span class="text-danger">*</span></label>
                         <div class="input-group shadow-sm">
                             <span class="input-group-text bg-light border-end-0"><i class="bi bi-person text-muted"></i></span>
                             <input type="text" name="name" class="form-control border-start-0 ps-0" placeholder="Contoh: Budi Santoso, S.Pd." required>
@@ -54,8 +53,8 @@
                 </div>
 
                 <div class="col-md-6">
-                    <div>
-                        <label class="form-label text-dark fw-semibold mb-1">Username Login <span class="text-danger">*</span></label>
+                    <div class="mb-3">
+                        <label class="text-dark fw-semibold mb-1">Username Login <span class="text-danger">*</span></label>
                         <div class="input-group shadow-sm">
                             <span class="input-group-text bg-light border-end-0"><i class="bi bi-person-badge text-muted"></i></span>
                             <input type="text" name="username" class="form-control border-start-0 ps-0" placeholder="Buat username (tanpa spasi)" required>
@@ -64,8 +63,8 @@
                 </div>
 
                 <div class="col-md-6">
-                    <div>
-                        <label class="form-label text-dark fw-semibold mb-1">Nomor WhatsApp</label>
+                    <div class="mb-3">
+                        <label class="text-dark fw-semibold mb-1">Nomor WhatsApp</label>
                         <div class="input-group shadow-sm">
                             <span class="input-group-text bg-light border-end-0"><i class="bi bi-whatsapp text-muted"></i></span>
                             <input type="text" name="phone" class="form-control border-start-0 ps-0" placeholder="Contoh: 08123456789">
@@ -74,8 +73,8 @@
                 </div>
 
                 <div class="col-md-6">
-                    <div>
-                        <label class="form-label text-dark fw-semibold mb-1">Mata Pelajaran <span class="text-danger">*</span></label>
+                    <div class="mb-3">
+                        <label class="text-dark fw-semibold mb-1">Mata Pelajaran <span class="text-danger">*</span></label>
                         <div class="input-group shadow-sm">
                             <span class="input-group-text bg-light border-end-0"><i class="bi bi-book text-muted"></i></span>
                             <input type="text" name="subject" class="form-control border-start-0 ps-0" placeholder="Contoh: Matematika" required>
@@ -84,18 +83,15 @@
                 </div>
 
                 <div class="col-md-6">
-                    <div>
-                        <label class="form-label text-dark fw-semibold mb-1">Peran / Tugas Tambahan <span class="text-danger">*</span></label>
+                    <div class="mb-3">
+                        <label class="text-dark fw-semibold mb-1">Peran / Tugas Tambahan <span class="text-danger">*</span></label>
                         <div class="input-group shadow-sm">
                             <span class="input-group-text bg-light border-end-0"><i class="bi bi-diagram-3 text-muted"></i></span>
-                            <select name="role_tambahan" class="form-select border-start-0 ps-0" required>
-                                <option value="" disabled selected>-- Pilih Peran Guru --</option>
-                                <option value="Guru Mapel">Guru Mata Pelajaran</option>
-                                <option value="Wali Kelas">Wali Kelas</option>
-                                <option value="Guru BK">Guru Bimbingan Konseling (BK)</option>
-                            </select>
+
+                            <input type="text" name="role_tambahan" class="form-control border-start-0 ps-0" placeholder="Contoh: Guru Mapel (Wali Kelas VII A)" required>
+
                         </div>
-                        <small class="text-muted mt-1 d-block"><i class="bi bi-info-circle me-1"></i>Tugas tambahan mempengaruhi hak akses guru pada sistem.</small>
+                        <small class="text-muted mt-1 d-block"><i class="bi bi-info-circle me-1"></i>Ketik peran secara bebas untuk ditampilkan di profil dan laporan.</small>
                     </div>
                 </div>
             </div>

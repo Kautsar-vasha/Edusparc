@@ -23,17 +23,22 @@
             <p class="text-muted mb-0 mt-1">Kelola data peserta didik EDUSPARC</p>
         </div>
         <div class="d-flex flex-wrap gap-2">
-            <button type="button" class="btn btn-outline-success shadow-sm rounded-pill px-4 fw-semibold" data-bs-toggle="modal" data-bs-target="#modalImport">
-                <i class="bi bi-file-earmark-excel me-1"></i> Import Excel
-            </button>
 
-            <form action="/siswa/hapus-lulus" method="POST" onsubmit="return confirm('PERINGATAN KERAS! Seluruh data siswa berstatus Lulus beserta riwayat karakternya akan dihapus PERMANEN dan tidak dapat dikembalikan. Lanjutkan?')">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="btn btn-outline-danger shadow-sm rounded-pill px-4 fw-semibold">
-                    <i class="bi bi-trash3-fill me-1"></i> Bersihkan Data Lulus
+            {{-- TOMBOL IMPORT & HAPUS LULUS HANYA TAMPIL UNTUK ADMIN --}}
+            @if(session('role') === 'admin' || session('role') === 'super_admin')
+                <button type="button" class="btn btn-outline-success shadow-sm rounded-pill px-4 fw-semibold" data-bs-toggle="modal" data-bs-target="#modalImport">
+                    <i class="bi bi-file-earmark-excel me-1"></i> Import Excel
                 </button>
-            </form>
+
+                <form action="/siswa/hapus-lulus" method="POST" onsubmit="return confirm('PERINGATAN KERAS! Seluruh data siswa berstatus Lulus beserta riwayat karakternya akan dihapus PERMANEN dan tidak dapat dikembalikan. Lanjutkan?')">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-outline-danger shadow-sm rounded-pill px-4 fw-semibold">
+                        <i class="bi bi-trash3-fill me-1"></i> Bersihkan Data Lulus
+                    </button>
+                </form>
+            @endif
+
         </div>
     </div>
 
@@ -160,6 +165,12 @@
                                 <a href="/siswa/{{ $s->id }}/qr" target="_blank" class="btn btn-sm btn-outline-dark shadow-sm" title="Cetak QR Code">
                                     <i class="bi bi-qr-code"></i>
                                 </a>
+
+                                {{-- Tombol Detail Siswa (Mata) --}}
+                                <a href="/siswa/{{ $s->id }}" class="btn btn-sm btn-outline-info shadow-sm" title="Lihat Profil Siswa">
+                                    <i class="bi bi-eye"></i>
+                                </a>
+
                                 <a href="/siswa/{{ $s->id }}/edit" class="btn btn-sm btn-outline-primary shadow-sm" title="Edit Siswa">
                                     <i class="bi bi-pencil-square"></i>
                                 </a>
@@ -187,6 +198,7 @@
     </div>
 </div>
 
+@if(session('role') === 'admin' || session('role') === 'super_admin')
 <div class="modal fade" id="modalImport" tabindex="-1" aria-labelledby="modalImportLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content border-0 shadow">
@@ -218,4 +230,5 @@
     </div>
   </div>
 </div>
+@endif
 @endsection

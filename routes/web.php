@@ -85,6 +85,9 @@ Route::get('/dashboard-ortu', function () {
     return view('dashboard_ortu');
 });
 
+// --- RUTE BARU: Memproses tanggapan dari orang tua ---
+Route::post('/pelanggaran/{id}/tanggapan', [ViolationController::class, 'tanggapanOrtu']);
+
 // ── GRUP MANAJEMEN (ADMIN & GURU) ──────────────────────────────
 Route::middleware(['web'])->group(function () {
 
@@ -93,6 +96,11 @@ Route::middleware(['web'])->group(function () {
     Route::get('/guru/create',      [TeacherController::class, 'create']);
     Route::post('/guru',            [TeacherController::class, 'store']);
     Route::post('/guru/import',     [TeacherController::class, 'import']);
+
+    // --- PENAMBAHAN RUTE EDIT DAN UPDATE ---
+    Route::get('/guru/{id}/edit',   [TeacherController::class, 'edit']);
+    Route::put('/guru/{id}',        [TeacherController::class, 'update']);
+
     Route::get('/guru/{id}',        [TeacherController::class, 'show']);
     Route::delete('/guru/{id}',     [TeacherController::class, 'destroy']);
 
@@ -105,8 +113,9 @@ Route::middleware(['web'])->group(function () {
     Route::post('/siswa/import',    [StudentController::class, 'import']);
     Route::get('/kenaikan-kelas',   [StudentController::class, 'formKenaikan']);
     Route::post('/kenaikan-kelas',  [StudentController::class, 'prosesKenaikan']);
+    Route::get('/siswa/{id}',       [StudentController::class, 'show']);
 
-    // --- FITUR BARU: HAPUS ALUMNI (Harus di atas {id}) ---
+    // --- HAPUS ALUMNI (Harus di atas {id}) ---
     Route::delete('/siswa/hapus-lulus', [StudentController::class, 'hapusLulus']);
 
     Route::get('/siswa/{id}/edit',  [StudentController::class, 'edit']);
@@ -127,6 +136,7 @@ Route::middleware(['web'])->group(function () {
     Route::post('/kelas',           [KelasController::class, 'store']);
     Route::put('/kelas/{id}',       [KelasController::class, 'update']);
     Route::delete('/kelas/{id}',    [KelasController::class, 'destroy']);
+    Route::get('/kelas/{id}',       [KelasController::class, 'show']);
 
     // ── MASTER TATA TERTIB (Khusus Admin) ─────────────────────────────────────
     Route::get('/tatib',            [\App\Http\Controllers\TatibController::class, 'index']);

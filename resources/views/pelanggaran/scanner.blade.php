@@ -42,7 +42,7 @@
                         <label class="form-label fw-bold small">Jenis Poin</label>
                         <select id="set_jenis" class="form-select fw-bold">
                             <option value="negatif" class="text-danger">Pelanggaran (-)</option>
-                            <option value="positif" class="text-success" selected>Kebaikan (+)</option>
+                            <option value="positif" class="text-success" selected>Penghargaan (+)</option>
                         </select>
                     </div>
                     <div class="col-8">
@@ -56,9 +56,8 @@
                     <div class="col-12">
                         <label class="form-label fw-bold small">Kategori</label>
                         <select id="set_category" class="form-select">
-                            <option value="Etika/Perilaku">Etika/Perilaku</option>
-                            <option value="Administratif">Administratif</option>
-                            <option value="Prestasi">Prestasi</option>
+                            <option value="Spiritual">Spiritual</option>
+                            <option value="Sosial">Sosial</option>
                         </select>
                     </div>
                     <div class="col-12">

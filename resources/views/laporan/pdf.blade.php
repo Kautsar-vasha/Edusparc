@@ -13,9 +13,12 @@
         .teks-kop p { margin: 0; font-size: 11px; font-style: italic; color: #555; }
 
         table.data { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        table.data th, table.data td { border: 1px solid #999; padding: 8px; text-align: left; }
+        table.data th, table.data td { border: 1px solid #999; padding: 8px; text-align: left; vertical-align: middle; }
         table.data th { background-color: #f2f2f2; font-weight: bold; text-align: center; }
         h3.judul { text-align: center; margin-bottom: 15px; text-transform: uppercase; }
+
+        /* Tambahan agar font tabel lebih rapi jika teksnya panjang */
+        .isi-tabel { font-size: 11px; }
     </style>
 </head>
 <body>
@@ -29,7 +32,8 @@
                 <h4>Sistem Edukasi Profil Sikap & Karakter (EDUSPARC)</h4>
                 <p>Jl. Nusa Indah No.14, Kelurahan Jember Lor, Kecamatan Patrang, Kabupaten Jember, Jawa Timur 68118</p>
             </td>
-            <td style="width: 80px;"></td> </tr>
+            <td style="width: 80px;"></td>
+        </tr>
     </table>
 
     <h3 class="judul">{{ $title }}</h3>
@@ -39,13 +43,22 @@
             <tr>
                 <th style="width: 5%;">No</th>
                 @foreach($headers as $h)
-                    <th>{{ $h }}</th>
+                    {{-- Logika Cerdas Pembagian Kolom --}}
+                    @if($h == 'Peran Guru')
+                        <th style="width: 32%;">{{ $h }}</th>
+                    @elseif($h == 'Nama Guru')
+                        <th style="width: 25%;">{{ $h }}</th>
+                    @elseif($h == 'Mata Pelajaran')
+                        <th style="width: 20%;">{{ $h }}</th>
+                    @else
+                        <th>{{ $h }}</th>
+                    @endif
                 @endforeach
             </tr>
         </thead>
         <tbody>
             @foreach($data as $index => $row)
-            <tr>
+            <tr class="isi-tabel">
                 <td style="text-align: center;">{{ $index + 1 }}</td>
                 @foreach($row as $cell)
                     <td>{{ $cell }}</td>

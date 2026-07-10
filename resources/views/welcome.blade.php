@@ -6,17 +6,28 @@
     <title>EDUSPARC - SMPN 4 Jember Mudadidaya</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
-    <!-- TAMBAHAN: Library CSS untuk Animasi Scroll (AOS) -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 
     <style>
         /* Desain Khusus Landing Page */
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; overflow-x: hidden; }
-        .navbar { box-shadow: 0 2px 15px rgba(0,0,0,0.05); background: white; }
+        .navbar { box-shadow: 0 2px 15px rgba(0,0,0,0.05); background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
         .hero-section { background: linear-gradient(135deg, #f0f7ff 0%, #ffffff 100%); padding: 100px 0 80px; position: relative; overflow: hidden; }
         .hero-title { font-weight: 800; font-size: 3rem; color: #0f2c59; line-height: 1.2; }
-        .hero-subtitle { font-size: 1.1rem; color: #5c6c7b; margin-bottom: 30px; }
         .badge-hero { background: #e6f0fa; color: #0d6efd; font-weight: 600; padding: 8px 15px; border-radius: 50px; font-size: 0.9rem; }
+
+        /* Desain Khusus Kotak Penjelasan EDUSPARC */
+        .edusparc-card {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 25px;
+            border-left: 6px solid #0d6efd;
+            box-shadow: 0 10px 30px rgba(13, 110, 253, 0.08);
+            position: relative;
+            z-index: 2;
+            transition: transform 0.3s ease;
+        }
+        .edusparc-card:hover { transform: translateY(-5px); }
 
         .feature-card { border: none; border-radius: 15px; transition: 0.3s; background: white; box-shadow: 0 5px 20px rgba(0,0,0,0.03); height: 100%; padding: 30px; }
         .feature-card:hover { transform: translateY(-10px); box-shadow: 0 15px 30px rgba(13, 110, 253, 0.1); }
@@ -36,7 +47,6 @@
 </head>
 <body>
 
-    <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg sticky-top py-3" data-aos="fade-down" data-aos-duration="800">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center fw-bold text-primary" href="/">
@@ -60,7 +70,6 @@
         </div>
     </nav>
 
-    <!-- SECTION 1: HERO -->
     <section id="beranda" class="hero-section">
         <div class="container">
             <div class="row align-items-center">
@@ -73,33 +82,41 @@
                         <span class="text-primary">Catat Karakter,</span><br>
                         Wujudkan Generasi Hebat
                     </h1>
-                    <p class="hero-subtitle mt-4">
-                        Platform terintegrasi untuk bimbingan karakter siswa. Memantau poin kedisiplinan, mengapresiasi kebaikan, dan mendampingi pembentukan moral secara transparan.
-                    </p>
-                    <div class="d-flex gap-3">
+
+                    <div class="edusparc-card mt-4 mb-4" data-aos="fade-up" data-aos-delay="200">
+                        <i class="bi bi-quote position-absolute top-0 end-0 text-primary opacity-10" style="font-size: 5rem; margin-top: -15px; margin-right: 15px;"></i>
+                        <h4 class="fw-bolder text-primary mb-0" style="letter-spacing: 1px;">EDUSPARC</h4>
+                        <p class="text-secondary fw-semibold mb-3" style="font-size: 0.9rem;">
+                            (Educational System for Profile, Attitude, Rating, and Character)
+                        </p>
+                        <p class="text-muted mb-0 lh-base" style="font-size: 0.95rem; text-align: justify;">
+                            Sistem pemantauan perkembangan karakter berbasis digital yang dirancang untuk membantu guru, wali kelas, dan kepala sekolah dalam memantau perkembangan sikap, perilaku, dan prestasi siswa secara <span class="fw-bold text-dark">real-time</span>.
+                        </p>
+                    </div>
+                    <div class="d-flex gap-3" data-aos="fade-up" data-aos-delay="400">
                         <a href="/login" class="btn btn-primary btn-lg fw-bold px-4 rounded-pill shadow">Mulai Sekarang</a>
                         <a href="#fitur" class="btn btn-outline-secondary btn-lg fw-bold px-4 rounded-pill">Pelajari Lanjut</a>
                     </div>
 
                     <div class="d-flex align-items-center mt-5 gap-4">
-                        <div data-aos="fade-up" data-aos-delay="200">
-                            <h4 class="fw-bold text-dark mb-0"><i class="bi bi-people-fill text-primary me-2"></i>500+</h4>
+                        <div data-aos="fade-up" data-aos-delay="500">
+                            <h4 class="fw-bold text-dark mb-0"><i class="bi bi-people-fill text-primary me-2"></i>700+</h4>
                             <small class="text-muted">Siswa Aktif</small>
                         </div>
-                        <div class="border-start ps-4" data-aos="fade-up" data-aos-delay="400">
+                        <div class="border-start ps-4" data-aos="fade-up" data-aos-delay="600">
                             <h4 class="fw-bold text-dark mb-0"><i class="bi bi-shield-check text-success me-2"></i>Terpusat</h4>
                             <small class="text-muted">Monitoring Real-time</small>
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-6 text-center" data-aos="fade-left" data-aos-duration="1000">
-                    <i class="bi bi-diagram-3-fill text-primary opacity-25" style="font-size: 20rem; line-height: 1;"></i>
+
+                <div class="col-lg-6 text-center position-relative" data-aos="fade-left" data-aos-duration="1000">
+                    <i class="bi bi-diagram-3-fill text-primary opacity-25 d-none d-lg-block" style="font-size: 20rem; line-height: 1;"></i>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- SECTION 2: FITUR -->
     <section id="fitur" class="py-5 bg-white">
         <div class="container py-5">
             <div class="text-center mb-5" data-aos="fade-up">
@@ -134,7 +151,6 @@
         </div>
     </section>
 
-    <!-- SECTION 3: AKSES JENJANG -->
     <section id="akses" class="py-5 bg-light">
         <div class="container py-5">
             <div class="text-center mb-5" data-aos="fade-up">
@@ -175,7 +191,6 @@
         </div>
     </section>
 
-    <!-- SECTION 4: CARA KERJA -->
     <section id="panduan" class="py-5 bg-white">
         <div class="container py-5">
             <div class="text-center mb-5" data-aos="zoom-in">
@@ -220,7 +235,6 @@
         </div>
     </section>
 
-    <!-- FOOTER PERUBAHAN -->
     <footer class="footer mt-auto border-top">
         <div class="container">
             <div class="row g-4 align-items-center">
@@ -230,21 +244,19 @@
                         <h4 class="fw-bold mb-0 text-white">EDUSPARC</h4>
                     </div>
                     <p class="small text-white-50 mb-0 pe-lg-5">
-                        Sistem Edukasi Profil Sikap & Karakter merupakan program dedikasi SMPN 4 Jember Mudadidaya untuk mencetak generasi penerus yang tidak hanya cerdas secara akademis, namun juga unggul dalam budi pekerti.
+                        Sistem Edukasi Profil Sikap & Karakter merupakan program dedikasi SMPN 4 Jember untuk mencetak generasi penerus yang tidak hanya cerdas secara akademis, namun juga unggul dalam budi pekerti.
                     </p>
                 </div>
 
-                <!-- Perubahan: Nomor dan Email di atas, Alamat di bawah -->
                 <div class="col-12 col-md-6 col-lg-3 text-center text-lg-start" data-aos="fade-up" data-aos-delay="100">
                     <h6 class="fw-bold text-white mb-3">Kontak Sekolah</h6>
                     <ul class="list-unstyled small text-white-50">
-                        <li class="mb-2"><i class="bi bi-telephone me-2"></i> (0331) 123456</li>
+                        <li class="mb-2"><i class="bi bi-telephone me-2"></i> (0331) 485525</li>
                         <li class="mb-3"><i class="bi bi-envelope me-2"></i> smpnjember4@gmail.com</li>
                         <li class="lh-sm"><i class="bi bi-geo-alt me-2 d-inline-block align-top"></i> <span class="d-inline-block" style="max-width: 85%;">Jl. Nusa Indah No.14, Jember Lor, Kecamatan Patrang, Kabupaten Jember, Jawa Timur</span></li>
                     </ul>
                 </div>
 
-                <!-- Perubahan: Ikuti Kami beserta Ikon Sosmed -->
                 <div class="col-12 col-md-6 col-lg-3 text-center text-lg-start" data-aos="fade-up" data-aos-delay="200">
                     <h6 class="fw-bold text-white mb-3">Ikuti Kami</h6>
                     <div class="d-flex gap-3 justify-content-center justify-content-lg-start mb-4">
@@ -253,20 +265,19 @@
                         <a href="https://vt.tiktok.com/ZSQEGbsT7/" class="text-white fs-4 social-icon"><i class="bi bi-tiktok"></i></a>
                         <a href="https://www.facebook.com/share/1E66iUxYxN/" class="text-white fs-4 social-icon"><i class="bi bi-facebook"></i></a>
                     </div>
-                    <p class="small text-white-50 mb-0">&copy; {{ date('Y') }} SMPN 4 Jember Mudadidaya.<br>Hak Cipta Dilindungi.</p>
+                    <p class="small text-white-50 mb-0">&copy; {{ date('Y') }} SMPN 4 Jember.<br>Hak Cipta Dilindungi.</p>
                 </div>
             </div>
         </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- TAMBAHAN: Script untuk inisiasi Animasi Scroll -->
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         AOS.init({
-            once: true, // Animasi hanya berjalan satu kali saat pertama kali di-scroll
-            offset: 100, // Jarak trigger animasi (dalam pixel) dari bawah layar
-            duration: 800 // Durasi animasi (dalam milidetik)
+            once: true,
+            offset: 100,
+            duration: 800
         });
     </script>
 </body>

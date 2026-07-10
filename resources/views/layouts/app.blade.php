@@ -15,13 +15,18 @@
             max-width: 260px;
             background: #212529;
             color: white;
-            padding: 20px 15px; /* Padding disesuaikan sedikit */
+            padding: 20px 15px;
             transition: all 0.3s ease-in-out;
             height: 100vh;
             position: sticky;
             top: 0;
             z-index: 1050;
+            overflow-y: auto; /* Tambahan agar bisa di-scroll jika layar kecil */
         }
+
+        /* Hilangkan scrollbar default untuk sidebar yang lebih estetik */
+        .sidebar::-webkit-scrollbar { width: 5px; }
+        .sidebar::-webkit-scrollbar-thumb { background: #495057; border-radius: 10px; }
 
         /* --- Pengaturan Konten Utama --- */
         .content {
@@ -37,10 +42,11 @@
             color: #adb5bd;
             text-decoration: none;
             display: block;
-            padding: 12px 15px;
+            padding: 10px 15px;
             border-radius: 8px;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
             transition: 0.2s;
+            font-size: 0.95rem;
         }
         .sidebar a.nav-link:hover, .sidebar a.nav-link.active {
             background: #0d6efd;
@@ -48,10 +54,23 @@
         }
         .sidebar a.nav-link i { margin-right: 10px; font-size: 1.1rem; }
 
+        /* Desain Judul Kategori Sidebar (Baru) */
+        .sidebar-category {
+            color: #6c757d;
+            font-size: 0.7rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: 0 15px;
+            margin-top: 20px;
+            margin-bottom: 8px;
+            display: block;
+        }
+
         /* Tombol Toggle */
         #sidebarToggle { background: none; border: none; font-size: 1.8rem; cursor: pointer; color: var(--bs-body-color); padding: 0; }
 
-        /* Desain Tombol Profil User (Baru) */
+        /* Desain Tombol Profil User */
         .user-profile-btn {
             background: rgba(255,255,255,0.05);
             border: 1px solid rgba(255,255,255,0.1);
@@ -120,37 +139,48 @@
                 <h4 class="m-0 fw-bold text-white tracking-wide">EDUSPARC</h4>
                 <button class="btn btn-sm btn-outline-light d-md-none" id="closeSidebar"><i class="bi bi-x m-0"></i></button>
             </div>
-            <hr class="border-secondary mb-4 mx-2">
+            <hr class="border-secondary mb-2 mx-2">
 
             {{-- Menu Khusus Admin --}}
-            @if(session('role') == 'admin')
+            @if(session('role') == 'admin' || session('role') == 'super_admin')
+                <span class="sidebar-category">Menu Utama</span>
                 <a href="/dashboard-admin" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a>
+
+                <span class="sidebar-category">Master Data</span>
                 <a href="/guru" class="nav-link"><i class="bi bi-person-badge"></i> Data Guru</a>
                 <a href="/siswa" class="nav-link"><i class="bi bi-person-vcard"></i> Data Siswa</a>
-                <a href="/kenaikan-kelas" class="nav-link"><i class="bi bi-capslock-fill"></i> Kenaikan Kelas</a>
                 <a href="/kelas" class="nav-link"><i class="bi bi-door-open"></i> Data Kelas</a>
-                <a href="/pelanggaran" class="nav-link"><i class="bi bi-shield-exclamation"></i> Input Karakter</a>
+                <a href="/kenaikan-kelas" class="nav-link"><i class="bi bi-capslock-fill"></i> Kenaikan Kelas</a>
+
+                <span class="sidebar-category">Kedisiplinan & Sikap</span>
                 <a href="/tatib" class="nav-link"><i class="bi bi-book-half"></i> Master Tata Tertib</a>
+                <a href="/pelanggaran" class="nav-link"><i class="bi bi-shield-exclamation"></i> Input Karakter</a>
                 <a href="/scanner" class="nav-link"><i class="bi bi-qr-code-scan"></i> Quick Scanner</a>
             @endif
 
             {{-- Menu Khusus Guru --}}
             @if(session('role') == 'guru')
+                <span class="sidebar-category">Menu Utama</span>
                 <a href="/dashboard-guru" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard</a>
+
+                <span class="sidebar-category">Data Akademik</span>
                 <a href="/guru" class="nav-link"><i class="bi bi-person-badge"></i> Data Guru</a>
                 <a href="/siswa" class="nav-link"><i class="bi bi-person-vcard"></i> Data Siswa</a>
                 <a href="/kelas" class="nav-link"><i class="bi bi-door-open"></i> Data Kelas</a>
+
+                <span class="sidebar-category">Kedisiplinan & Sikap</span>
                 <a href="/pelanggaran" class="nav-link"><i class="bi bi-shield-exclamation"></i> Input Karakter</a>
                 <a href="/scanner" class="nav-link"><i class="bi bi-qr-code-scan"></i> Quick Scanner</a>
             @endif
 
             {{-- Menu Khusus Orang Tua --}}
             @if(session('role') == 'ortu')
+                <span class="sidebar-category">Menu Utama</span>
                 <a href="/dashboard-ortu" class="nav-link"><i class="bi bi-speedometer2"></i> Dashboard Anak</a>
             @endif
         </div>
 
-        <div class="mt-auto pt-3 border-top border-secondary">
+        <div class="mt-auto pt-3 pb-2 border-top border-secondary">
             <div class="dropup w-100">
                 <a href="#" class="d-flex align-items-center text-white text-decoration-none user-profile-btn w-100 p-2 rounded" data-bs-toggle="dropdown" aria-expanded="false">
                     <div class="user-avatar me-3 shadow-sm">
@@ -164,7 +194,7 @@
                 </a>
 
                 <ul class="dropdown-menu dropdown-menu-dark text-small shadow w-100 mb-2 rounded-3 border-secondary">
-                    @if(in_array(session('role'), ['admin', 'guru']))
+                    @if(in_array(session('role'), ['admin', 'guru', 'super_admin']))
                         <li>
                             <a class="dropdown-item py-2 d-flex align-items-center" href="/pengaturan">
                                 <i class="bi bi-gear me-3 text-secondary"></i> Pengaturan Akun

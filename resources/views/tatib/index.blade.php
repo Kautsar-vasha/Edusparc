@@ -55,6 +55,8 @@
                             {{ $t->jenis == 'negatif' ? '-' : '+' }}{{ $t->poin }}
                         </td>
                         <td class="text-muted small">{{ $t->sanksi ?? '-' }}</td>
+
+                        <!-- PERBAIKAN: Modal Edit dimasukkan ke dalam <td> ini -->
                         <td class="text-center">
                             <div class="d-flex justify-content-center gap-2">
                                 <button type="button" class="btn btn-sm btn-outline-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#modalEdit{{ $t->id }}">
@@ -62,53 +64,57 @@
                                 </button>
                                 <form action="/tatib/{{ $t->id }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus aturan ini?');">
                                     @csrf @method('DELETE')
-                                    <button class="btn btn-sm btn-outline-danger shadow-sm"><i class="bi bi-trash"></i></button>
+                                    <!-- Tambahan type="submit" -->
+                                    <button type="submit" class="btn btn-sm btn-outline-danger shadow-sm"><i class="bi bi-trash"></i></button>
                                 </form>
                             </div>
+
+                            <!-- Modal Edit sekarang aman berada di dalam <td> -->
+                            <div class="modal fade text-start" id="modalEdit{{ $t->id }}" tabindex="-1">
+                                <div class="modal-dialog modal-lg">
+                                    <form action="/tatib/{{ $t->id }}" method="POST" class="modal-content border-0 shadow">
+                                        @csrf @method('PUT')
+                                        <div class="modal-header bg-light border-0"><h5 class="fw-bold">Edit Aturan</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+                                        <div class="modal-body p-4 row g-3">
+                                            <div class="col-md-3">
+                                                <label class="form-label small fw-bold">Kode</label>
+                                                <input type="text" name="kode" class="form-control" value="{{ $t->kode }}" required>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label small fw-bold">Jenis</label>
+                                                <select name="jenis" class="form-select" required>
+                                                    <option value="negatif" {{ $t->jenis == 'negatif' ? 'selected' : '' }}>Pelanggaran (-)</option>
+                                                    <option value="positif" {{ $t->jenis == 'positif' ? 'selected' : '' }}>Penghargaan (+)</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label small fw-bold">Kategori</label>
+                                                <select name="kategori" class="form-select" required>
+                                                    <option value="Spiritual" {{ $t->kategori == 'Spiritual' ? 'selected' : '' }}>Spiritual</option>
+                                                    <option value="Sosial" {{ $t->kategori == 'Sosial' ? 'selected' : '' }}>Sosial</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <label class="form-label small fw-bold">Poin</label>
+                                                <input type="number" name="poin" class="form-control" value="{{ $t->poin }}" min="1" required>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label class="form-label small fw-bold">Uraian / Penjelasan Aktivitas</label>
+                                                <textarea name="uraian" class="form-control" rows="2" required>{{ $t->uraian }}</textarea>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label class="form-label small fw-bold">Sanksi / Pembinaan (Opsional)</label>
+                                                <input type="text" name="sanksi" class="form-control" value="{{ $t->sanksi }}">
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer border-0"><button type="submit" class="btn btn-primary px-4 fw-bold">Simpan Perubahan</button></div>
+                                    </form>
+                                </div>
+                            </div>
+                            <!-- Akhir Modal Edit -->
+
                         </td>
                     </tr>
-
-                    <div class="modal fade" id="modalEdit{{ $t->id }}" tabindex="-1">
-                        <div class="modal-dialog modal-lg">
-                            <form action="/tatib/{{ $t->id }}" method="POST" class="modal-content border-0 shadow">
-                                @csrf @method('PUT')
-                                <div class="modal-header bg-light border-0"><h5 class="fw-bold">Edit Aturan</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
-                                <div class="modal-body p-4 row g-3">
-                                    <div class="col-md-3">
-                                        <label class="form-label small fw-bold">Kode</label>
-                                        <input type="text" name="kode" class="form-control" value="{{ $t->kode }}" required>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label small fw-bold">Jenis</label>
-                                        <select name="jenis" class="form-select" required>
-                                            <option value="negatif" {{ $t->jenis == 'negatif' ? 'selected' : '' }}>Pelanggaran (-)</option>
-                                            <option value="positif" {{ $t->jenis == 'positif' ? 'selected' : '' }}>Penghargaan (+)</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label small fw-bold">Kategori</label>
-                                        <select name="kategori" class="form-select" required>
-                                            <option value="Spiritual" {{ $t->kategori == 'Spiritual' ? 'selected' : '' }}>Spiritual</option>
-                                            <option value="Sosial" {{ $t->kategori == 'Sosial' ? 'selected' : '' }}>Sosial</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <label class="form-label small fw-bold">Poin</label>
-                                        <input type="number" name="poin" class="form-control" value="{{ $t->poin }}" min="1" required>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <label class="form-label small fw-bold">Uraian / Penjelasan Aktivitas</label>
-                                        <textarea name="uraian" class="form-control" rows="2" required>{{ $t->uraian }}</textarea>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <label class="form-label small fw-bold">Sanksi / Pembinaan (Opsional)</label>
-                                        <input type="text" name="sanksi" class="form-control" value="{{ $t->sanksi }}">
-                                    </div>
-                                </div>
-                                <div class="modal-footer border-0"><button type="submit" class="btn btn-primary px-4 fw-bold">Simpan Perubahan</button></div>
-                            </form>
-                        </div>
-                    </div>
                     @empty
                     <tr><td colspan="6" class="text-center py-4 text-muted"><i class="bi bi-inbox fs-2 d-block mb-2"></i>Belum ada data tata tertib.</td></tr>
                     @endforelse

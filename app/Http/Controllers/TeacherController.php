@@ -56,6 +56,35 @@ class TeacherController extends Controller
         return view('guru.show', compact('teacher'));
     }
 
+    // --- FUNGSI BARU: EDIT DATA (Akses: Hanya Admin) ---
+    public function edit($id) {
+        if (session('role') !== 'admin') {
+            return redirect('/guru')->with('error', 'Hanya Admin yang dapat mengubah data guru.');
+        }
+        $teacher = Teacher::findOrFail($id);
+        return view('guru.edit', compact('teacher'));
+    }
+
+    // --- FUNGSI BARU: UPDATE DATA (Akses: Hanya Admin) ---
+    public function update(Request $request, $id) {
+        if (session('role') !== 'admin') {
+            return redirect('/guru')->with('error', 'Akses ditolak!');
+        }
+
+        $teacher = Teacher::findOrFail($id);
+
+        $teacher->update([
+            'nip'           => $request->nip,
+            'name'          => $request->name,
+            'username'      => $request->username,
+            'subject'       => $request->subject,
+            'role_tambahan' => $request->role_tambahan,
+            'phone'         => $request->phone,
+        ]);
+
+        return redirect('/guru')->with('success', 'Data Guru berhasil diperbarui!');
+    }
+
     // Akses: Hanya Admin
     public function destroy($id) {
         if (session('role') !== 'admin') {
@@ -65,7 +94,7 @@ class TeacherController extends Controller
         return redirect('/guru')->with('success', 'Data Guru berhasil dihapus!');
     }
 
-    // --- FUNGSI BARU UNTUK IMPORT EXCEL ---
+    // Fungsi Import Excel
     public function import(Request $request) {
         if (session('role') !== 'admin') {
             return redirect('/guru')->with('error', 'Hanya Admin yang dapat melakukan impor data!');

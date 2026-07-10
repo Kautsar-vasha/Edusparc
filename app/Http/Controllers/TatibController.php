@@ -14,8 +14,14 @@ class TatibController extends Controller
             return redirect('/')->with('error', 'Hanya Admin yang dapat mengakses Master Tata Tertib!');
         }
 
-        // Urutkan berdasarkan jenis (Negatif dulu, baru Positif) lalu berdasarkan Kode
-        $tatibs = Tatib::orderBy('jenis')->orderBy('kode')->get();
+        // PERBAIKAN: Mengurutkan secara Natural (a.4 akan berada di atas a.30)
+        $tatibs = Tatib::all()->sort(function($a, $b) {
+            if ($a->jenis == $b->jenis) {
+                return strnatcmp($a->kode, $b->kode);
+            }
+            return strcmp($a->jenis, $b->jenis);
+        })->values();
+
         return view('tatib.index', compact('tatibs'));
     }
 
@@ -57,6 +63,7 @@ class TatibController extends Controller
         Tatib::findOrFail($id)->delete();
         return back()->with('success', 'Aturan tata tertib berhasil dihapus!');
     }
+
     // Fungsi Import Data dari Excel/CSV
     public function import(Request $request)
     {
@@ -81,12 +88,11 @@ class TatibController extends Controller
 
             // Pastikan kolom data cukup (minimal 5 kolom: kode, jenis, kategori, uraian, poin)
             if (count($data) >= 5) {
-                // updateOrCreate berguna agar jika kode (misal a.1) sudah ada, datanya diperbarui, bukan error
                 Tatib::updateOrCreate(
                     ['kode' => trim($data[0])],
                     [
-                        'jenis'    => strtolower(trim($data[1])), // Harus 'negatif' atau 'positif'
-                        'kategori' => trim($data[2]),             // 'Spiritual' atau 'Sosial'
+                        'jenis'    => strtolower(trim($data[1])),
+                        'kategori' => trim($data[2]),
                         'uraian'   => trim($data[3]),
                         'poin'     => (int) $data[4],
                         'sanksi'   => isset($data[5]) ? trim($data[5]) : null,

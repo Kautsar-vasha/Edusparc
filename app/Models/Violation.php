@@ -6,10 +6,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class Violation extends Model
 {
-    //agar Laravel mengizinkan data disimpan ke kolom-kolom ini
-    protected $fillable = ['student_id', 'jenis_poin', 'type', 'category', 'points', 'description', 'motivation'];
+    protected $fillable = [
+        'student_id',
+        'jenis_poin',
+        'type',
+        'category',
+        'points',
+        'description',
+        'motivation',
+        'tanggapan_ortu',
+        'bukti_foto' // <--- Izin akses kolom foto baru
+    ];
 
-    // Relasi ke tabel Student (Penting agar tidak error saat panggil nama siswa)
     public function student()
     {
         return $this->belongsTo(Student::class);

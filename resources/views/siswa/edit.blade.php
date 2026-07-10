@@ -148,7 +148,7 @@
                 {{-- Info Total Poin (readonly) --}}
                 <div class="col-md-6">
                     <label class="form-label fw-semibold text-muted small">
-                        Total Poin Pelanggaran
+                        Total Poin Aktivitas 
                     </label>
                     <div class="input-group shadow-sm">
                         <span class="input-group-text bg-light border-end-0">
