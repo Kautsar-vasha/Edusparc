@@ -15,7 +15,7 @@ class Violation extends Model
         'description',
         'motivation',
         'tanggapan_ortu',
-        'bukti_foto' // <--- Izin akses kolom foto baru
+        'bukti_foto' // Izin akses kolom foto baru
     ];
 
     public function student()

@@ -7,7 +7,7 @@ use App\Models\Student;
 use App\Models\Violation;
 use App\Models\Kelas;
 use App\Models\Tatib;
-use Illuminate\Support\Facades\Storage; // <--- Wajib dipanggil untuk kelola file
+use Illuminate\Support\Facades\Storage; // Wajib dipanggil untuk kelola file
 
 class ViolationController extends Controller
 {

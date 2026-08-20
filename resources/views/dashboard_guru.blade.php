@@ -53,7 +53,7 @@
     <div class="row mb-4 align-items-center g-3">
         <div class="col-12 col-md-8">
             <div class="d-flex align-items-center flex-column flex-sm-row text-center text-sm-start">
-                <img src="{{ asset('images/logo_sekolah.png') }}" alt="Logo" class="mb-3 mb-sm-0 me-sm-3" style="height: 60px; width: auto;">
+                <img src="{{ asset('images/logo_edusparc.jpeg') }}" alt="Logo" class="mb-3 mb-sm-0 me-sm-3" style="height: 60px; width: auto;">
                 <div>
                     <h3 class="fw-bold mb-1 text-dark">Selamat Datang, {{ session('name') }}! 👋</h3>
                     <p class="text-muted mb-0">

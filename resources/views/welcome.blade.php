@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EDUSPARC - SMPN 4 Jember Mudadidaya</title>
+    <link rel="icon" href="{{ asset('images/logo_edusparc_bg.png') }}" type="image/png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
@@ -22,6 +23,7 @@
             border-radius: 16px;
             padding: 25px;
             border-left: 6px solid #0d6efd;
+
             box-shadow: 0 10px 30px rgba(13, 110, 253, 0.08);
             position: relative;
             z-index: 2;
@@ -50,7 +52,7 @@
     <nav class="navbar navbar-expand-lg sticky-top py-3" data-aos="fade-down" data-aos-duration="800">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center fw-bold text-primary" href="/">
-                <img src="{{ asset('images/logo_sekolah.png') }}" alt="Logo" width="40" class="me-2">
+                <img src="{{ asset('images/logo_edusparc.jpeg') }}" alt="Logo" width="40" class="me-2">
                 EDUSPARC
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -100,7 +102,7 @@
 
                     <div class="d-flex align-items-center mt-5 gap-4">
                         <div data-aos="fade-up" data-aos-delay="500">
-                            <h4 class="fw-bold text-dark mb-0"><i class="bi bi-people-fill text-primary me-2"></i>700+</h4>
+                            <h4 class="fw-bold text-dark mb-0"><i class="bi bi-people-fill text-primary me-2"></i>1000+</h4>
                             <small class="text-muted">Siswa Aktif</small>
                         </div>
                         <div class="border-start ps-4" data-aos="fade-up" data-aos-delay="600">
@@ -240,7 +242,7 @@
             <div class="row g-4 align-items-center">
                 <div class="col-12 col-lg-6 text-center text-lg-start" data-aos="fade-right">
                     <div class="d-flex align-items-center justify-content-center justify-content-lg-start mb-3">
-                        <img src="{{ asset('images/logo_sekolah.png') }}" alt="Logo" width="45" class="me-3 bg-white p-1 rounded-circle">
+                        <img src="{{ asset('images/logo_edusparc.jpeg') }}" alt="Logo" width="45" class="me-3 bg-white p-1 rounded-circle">
                         <h4 class="fw-bold mb-0 text-white">EDUSPARC</h4>
                     </div>
                     <p class="small text-white-50 mb-0 pe-lg-5">

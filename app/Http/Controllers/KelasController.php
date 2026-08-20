@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Kelas;
-use App\Models\Student; // Pastikan model Student dipanggil
+use App\Models\Student;
 use Illuminate\Http\Request;
 
 class KelasController extends Controller
@@ -15,7 +15,7 @@ class KelasController extends Controller
         return view('kelas.index', compact('data_kelas'));
     }
 
-    // --- FUNGSI BARU: Melihat Struktur Siswa dalam Kelas ---
+    // --- Melihat Struktur Siswa dalam Kelas ---
     public function show($id)
     {
         $kelas = Kelas::findOrFail($id);

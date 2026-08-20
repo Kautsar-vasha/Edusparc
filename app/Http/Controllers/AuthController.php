@@ -22,7 +22,7 @@ class AuthController extends Controller
         $admin = User::where('username', $request->username)->first();
         if ($admin && Hash::check($request->password, $admin->password)) {
             Session::put([
-                'role'     => $admin->role, // ✅ ambil dari DB, bukan hardcode 'admin'
+                'role'     => $admin->role, //  ambil dari DB, bukan hardcode 'admin'
                 'user_id'  => $admin->id,
                 'name'     => $admin->name,
                 'username' => $admin->username,

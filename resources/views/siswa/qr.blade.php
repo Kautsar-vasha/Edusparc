@@ -92,7 +92,7 @@
 
     <div class="card">
         <div class="card-header">
-            <img src="{{ asset('images/logo_sekolah.png') }}" alt="Logo">
+            <img src="{{ asset('images/logo_edusparc.jpeg') }}" alt="Logo">
             <h4>SMPN 4 JEMBER MUDADIDAYA</h4>
             <p>Sistem Edukasi Profil Sikap & Karakter</p>
         </div>
