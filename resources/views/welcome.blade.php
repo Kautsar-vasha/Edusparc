@@ -14,8 +14,17 @@
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; overflow-x: hidden; }
         .navbar { box-shadow: 0 2px 15px rgba(0,0,0,0.05); background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
         .hero-section { background: linear-gradient(135deg, #f0f7ff 0%, #ffffff 100%); padding: 100px 0 80px; position: relative; overflow: hidden; }
-        .hero-title { font-weight: 800; font-size: 3rem; color: #0f2c59; line-height: 1.2; }
-        .badge-hero { background: #e6f0fa; color: #0d6efd; font-weight: 600; padding: 8px 15px; border-radius: 50px; font-size: 0.9rem; }
+
+        /* Font Responsif Dinamis */
+        .hero-title {
+            font-weight: 800;
+            font-size: clamp(1.8rem, 5vw, 3rem);
+            color: #0f2c59;
+            line-height: 1.25;
+            word-wrap: break-word;
+        }
+
+        .badge-hero { background: #e6f0fa; color: #0d6efd; font-weight: 600; padding: 8px 15px; border-radius: 50px; font-size: 0.85rem; }
 
         /* Desain Khusus Kotak Penjelasan EDUSPARC */
         .edusparc-card {
@@ -23,7 +32,6 @@
             border-radius: 16px;
             padding: 25px;
             border-left: 6px solid #0d6efd;
-
             box-shadow: 0 10px 30px rgba(13, 110, 253, 0.08);
             position: relative;
             z-index: 2;
@@ -45,6 +53,13 @@
         /* Efek Hover Sosmed */
         .social-icon { transition: transform 0.2s ease, color 0.2s ease; }
         .social-icon:hover { transform: translateY(-5px); color: #0d6efd !important; }
+
+        /* Media Queries untuk HP & Tablet */
+        @media (max-width: 767.98px) {
+            .hero-section { padding: 40px 0 40px; }
+            .edusparc-card { padding: 18px; }
+            .quote-icon { font-size: 3rem !important; margin-top: -5px !important; }
+        }
     </style>
 </head>
 <body>
@@ -55,18 +70,18 @@
                 <img src="{{ asset('images/logo_edusparc.jpeg') }}" alt="Logo" width="40" class="me-2">
                 EDUSPARC
             </a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav mx-auto fw-semibold">
+                <ul class="navbar-nav mx-auto fw-semibold my-3 my-lg-0">
                     <li class="nav-item"><a class="nav-link px-3" href="#beranda">Beranda</a></li>
                     <li class="nav-item"><a class="nav-link px-3" href="#fitur">Fitur Unggulan</a></li>
                     <li class="nav-item"><a class="nav-link px-3" href="#akses">Akses Pengguna</a></li>
                     <li class="nav-item"><a class="nav-link px-3" href="#panduan">Cara Kerja</a></li>
                 </ul>
                 <div class="d-flex">
-                    <a href="/login" class="btn btn-primary fw-bold px-4 rounded-pill shadow-sm">Masuk Portal <i class="bi bi-box-arrow-in-right ms-1"></i></a>
+                    <a href="/login" class="btn btn-primary fw-bold px-4 rounded-pill shadow-sm w-100 w-lg-auto text-center">Masuk Portal <i class="bi bi-box-arrow-in-right ms-1"></i></a>
                 </div>
             </div>
         </div>
@@ -75,52 +90,53 @@
     <section id="beranda" class="hero-section">
         <div class="container">
             <div class="row align-items-center">
-                <div class="col-lg-6 mb-5 mb-lg-0" data-aos="fade-right" data-aos-duration="1000">
+                <div class="col-lg-6 mb-4 mb-lg-0" data-aos="fade-right" data-aos-duration="1000">
                     <div class="d-inline-block mb-3 badge-hero">
                         <i class="bi bi-star-fill text-warning me-1"></i> Inovasi Pendidikan SMPN 4 Jember
                     </div>
-                    <h1 class="hero-title">
+                    <h1 class="hero-title mb-3">
                         Bentuk Sikap,<br>
                         <span class="text-primary">Catat Karakter,</span><br>
                         Wujudkan Generasi Hebat
                     </h1>
 
-                    <div class="edusparc-card mt-4 mb-4" data-aos="fade-up" data-aos-delay="200">
-                        <i class="bi bi-quote position-absolute top-0 end-0 text-primary opacity-10" style="font-size: 5rem; margin-top: -15px; margin-right: 15px;"></i>
+                    <div class="edusparc-card mt-3 mb-4" data-aos="fade-up" data-aos-delay="200">
+                        <i class="bi bi-quote position-absolute top-0 end-0 text-primary opacity-10 quote-icon" style="font-size: 4rem; margin-top: -10px; margin-right: 10px;"></i>
                         <h4 class="fw-bolder text-primary mb-0" style="letter-spacing: 1px;">EDUSPARC</h4>
-                        <p class="text-secondary fw-semibold mb-3" style="font-size: 0.9rem;">
+                        <p class="text-secondary fw-semibold mb-2" style="font-size: 0.85rem;">
                             (Educational System for Profile, Attitude, Rating, and Character)
                         </p>
-                        <p class="text-muted mb-0 lh-base" style="font-size: 0.95rem; text-align: justify;">
+                        <p class="text-muted mb-0 lh-base" style="font-size: 0.9rem; text-align: justify;">
                             Sistem pemantauan perkembangan karakter berbasis digital yang dirancang untuk membantu guru, wali kelas, dan kepala sekolah dalam memantau perkembangan sikap, perilaku, dan prestasi siswa secara <span class="fw-bold text-dark">real-time</span>.
                         </p>
                     </div>
-                    <div class="d-flex gap-3" data-aos="fade-up" data-aos-delay="400">
-                        <a href="/login" class="btn btn-primary btn-lg fw-bold px-4 rounded-pill shadow">Mulai Sekarang</a>
-                        <a href="#fitur" class="btn btn-outline-secondary btn-lg fw-bold px-4 rounded-pill">Pelajari Lanjut</a>
+
+                    <div class="d-flex flex-column flex-sm-row gap-2 gap-sm-3" data-aos="fade-up" data-aos-delay="400">
+                        <a href="/login" class="btn btn-primary btn-lg fw-bold px-4 rounded-pill shadow w-100 w-sm-auto text-center">Mulai Sekarang</a>
+                        <a href="#fitur" class="btn btn-outline-secondary btn-lg fw-bold px-4 rounded-pill w-100 w-sm-auto text-center">Pelajari Lanjut</a>
                     </div>
 
-                    <div class="d-flex align-items-center mt-5 gap-4">
+                    <div class="d-flex flex-wrap align-items-center mt-4 mt-lg-5 gap-3 gap-sm-4">
                         <div data-aos="fade-up" data-aos-delay="500">
-                            <h4 class="fw-bold text-dark mb-0"><i class="bi bi-people-fill text-primary me-2"></i>1000+</h4>
+                            <h4 class="fw-bold text-dark mb-0 fs-5 fs-sm-4"><i class="bi bi-people-fill text-primary me-2"></i>1000+</h4>
                             <small class="text-muted">Siswa Aktif</small>
                         </div>
-                        <div class="border-start ps-4" data-aos="fade-up" data-aos-delay="600">
-                            <h4 class="fw-bold text-dark mb-0"><i class="bi bi-shield-check text-success me-2"></i>Terpusat</h4>
+                        <div class="border-start ps-3 ps-sm-4" data-aos="fade-up" data-aos-delay="600">
+                            <h4 class="fw-bold text-dark mb-0 fs-5 fs-sm-4"><i class="bi bi-shield-check text-success me-2"></i>Terpusat</h4>
                             <small class="text-muted">Monitoring Real-time</small>
                         </div>
                     </div>
                 </div>
 
-                <div class="col-lg-6 text-center position-relative" data-aos="fade-left" data-aos-duration="1000">
-                    <i class="bi bi-diagram-3-fill text-primary opacity-25 d-none d-lg-block" style="font-size: 20rem; line-height: 1;"></i>
+                <div class="col-lg-6 text-center position-relative d-none d-lg-block" data-aos="fade-left" data-aos-duration="1000">
+                    <i class="bi bi-diagram-3-fill text-primary opacity-25" style="font-size: 20rem; line-height: 1;"></i>
                 </div>
             </div>
         </div>
     </section>
 
     <section id="fitur" class="py-5 bg-white">
-        <div class="container py-5">
+        <div class="container py-3 py-md-5">
             <div class="text-center mb-5" data-aos="fade-up">
                 <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold mb-2">Program Sekolah Terpadu</span>
                 <h2 class="fw-bold text-dark">Fitur Unggulan EDUSPARC</h2>
@@ -128,21 +144,21 @@
             </div>
 
             <div class="row g-4">
-                <div class="col-md-4" data-aos="fade-up" data-aos-delay="100">
+                <div class="col-12 col-md-4" data-aos="fade-up" data-aos-delay="100">
                     <div class="feature-card">
                         <div class="feature-icon bg-primary bg-opacity-10 text-primary"><i class="bi bi-qr-code-scan"></i></div>
                         <h5 class="fw-bold">Quick Scanner Terintegrasi</h5>
                         <p class="text-muted small mb-0">Catat pelanggaran atau kebaikan siswa dalam hitungan detik menggunakan Kamera HP atau alat Scanner Barcode USB.</p>
                     </div>
                 </div>
-                <div class="col-md-4" data-aos="fade-up" data-aos-delay="200">
+                <div class="col-12 col-md-4" data-aos="fade-up" data-aos-delay="200">
                     <div class="feature-card">
                         <div class="feature-icon bg-success bg-opacity-10 text-success"><i class="bi bi-graph-up-arrow"></i></div>
                         <h5 class="fw-bold">Sistem Saldo Poin</h5>
                         <p class="text-muted small mb-0">Perhitungan poin yang cerdas. Kebaikan akan menambah saldo, pelanggaran akan mengurangi saldo secara otomatis.</p>
                     </div>
                 </div>
-                <div class="col-md-4" data-aos="fade-up" data-aos-delay="300">
+                <div class="col-12 col-md-4" data-aos="fade-up" data-aos-delay="300">
                     <div class="feature-card">
                         <div class="feature-icon bg-info bg-opacity-10 text-info"><i class="bi bi-file-earmark-pdf"></i></div>
                         <h5 class="fw-bold">Export Laporan Berkala</h5>
@@ -154,14 +170,14 @@
     </section>
 
     <section id="akses" class="py-5 bg-light">
-        <div class="container py-5">
+        <div class="container py-3 py-md-5">
             <div class="text-center mb-5" data-aos="fade-up">
                 <h2 class="fw-bold text-dark">Solusi untuk Setiap Peran</h2>
                 <p class="text-muted">Dari tenaga pendidik hingga orang tua, semua saling terhubung</p>
             </div>
 
             <div class="row g-4 justify-content-center">
-                <div class="col-12 col-md-4" data-aos="flip-left" data-aos-duration="800">
+                <div class="col-12 col-md-6 col-lg-4" data-aos="flip-left" data-aos-duration="800">
                     <div class="card border-0 shadow-sm rounded-4 h-100 p-4 border-top border-4 border-primary">
                         <div class="d-flex align-items-center mb-3">
                             <i class="bi bi-person-badge-fill fs-2 text-primary me-3"></i>
@@ -175,7 +191,7 @@
                         </ul>
                     </div>
                 </div>
-                <div class="col-12 col-md-4" data-aos="flip-right" data-aos-duration="800" data-aos-delay="200">
+                <div class="col-12 col-md-6 col-lg-4" data-aos="flip-right" data-aos-duration="800" data-aos-delay="200">
                     <div class="card border-0 shadow-sm rounded-4 h-100 p-4 border-top border-4 border-success">
                         <div class="d-flex align-items-center mb-3">
                             <i class="bi bi-people-fill fs-2 text-success me-3"></i>
@@ -194,43 +210,43 @@
     </section>
 
     <section id="panduan" class="py-5 bg-white">
-        <div class="container py-5">
+        <div class="container py-3 py-md-5">
             <div class="text-center mb-5" data-aos="zoom-in">
                 <h2 class="fw-bold text-dark">Cara Kerja Platform EDUSPARC</h2>
                 <p class="text-muted">4 langkah mudah untuk memantau kedisiplinan dan membangun karakter</p>
             </div>
 
-            <div class="row g-4 mt-4">
-                <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="100">
+            <div class="row g-4 mt-2">
+                <div class="col-12 col-sm-6 col-lg-3" data-aos="fade-up" data-aos-delay="100">
                     <div class="step-number shadow-sm">1</div>
                     <div class="step-card">
                         <i class="bi bi-upc-scan text-primary fs-1 mb-3 d-block"></i>
                         <h6 class="fw-bold">Scan Kartu Siswa</h6>
-                        <p class="small text-muted">Arahkan Kartu Pelajar ke alat scanner atau input NIS secara manual.</p>
+                        <p class="small text-muted mb-0">Arahkan Kartu Pelajar ke alat scanner atau input NIS secara manual.</p>
                     </div>
                 </div>
-                <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="200">
+                <div class="col-12 col-sm-6 col-lg-3" data-aos="fade-up" data-aos-delay="200">
                     <div class="step-number shadow-sm">2</div>
                     <div class="step-card">
                         <i class="bi bi-journal-text text-success fs-1 mb-3 d-block"></i>
                         <h6 class="fw-bold">Input Kejadian</h6>
-                        <p class="small text-muted">Pilih jenis aktivitas (kebaikan/pelanggaran) dan masukkan poin.</p>
+                        <p class="small text-muted mb-0">Pilih jenis aktivitas (kebaikan/pelanggaran) dan masukkan poin.</p>
                     </div>
                 </div>
-                <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="300">
+                <div class="col-12 col-sm-6 col-lg-3" data-aos="fade-up" data-aos-delay="300">
                     <div class="step-number shadow-sm">3</div>
                     <div class="step-card">
                         <i class="bi bi-hdd-network text-info fs-1 mb-3 d-block"></i>
                         <h6 class="fw-bold">Data Terpusat</h6>
-                        <p class="small text-muted">Sistem akan secara otomatis menyesuaikan akumulasi poin individu.</p>
+                        <p class="small text-muted mb-0">Sistem akan secara otomatis menyesuaikan akumulasi poin individu.</p>
                     </div>
                 </div>
-                <div class="col-6 col-lg-3" data-aos="fade-up" data-aos-delay="400">
+                <div class="col-12 col-sm-6 col-lg-3" data-aos="fade-up" data-aos-delay="400">
                     <div class="step-number shadow-sm">4</div>
                     <div class="step-card">
                         <i class="bi bi-pie-chart-fill text-warning fs-1 mb-3 d-block"></i>
                         <h6 class="fw-bold">Evaluasi Bersama</h6>
-                        <p class="small text-muted">Guru BK dan Orang Tua meninjau grafik perkembangan karakter siswa.</p>
+                        <p class="small text-muted mb-0">Guru BK dan Orang Tua meninjau grafik perkembangan karakter siswa.</p>
                     </div>
                 </div>
             </div>
