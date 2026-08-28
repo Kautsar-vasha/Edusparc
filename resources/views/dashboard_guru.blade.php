@@ -23,6 +23,8 @@
         font-size: 1.5rem;
         flex-shrink: 0;
     }
+
+    /* Gradien Warna */
     .bg-gradient-primary { background: linear-gradient(135deg, #0d6efd 0%, #0a58ca 100%); }
     .bg-gradient-success { background: linear-gradient(135deg, #198754 0%, #146c43 100%); }
     .bg-gradient-warning { background: linear-gradient(135deg, #ffc107 0%, #ffcd39 100%); }
@@ -30,6 +32,7 @@
     .bg-gradient-info { background: linear-gradient(135deg, #0dcaf0 0%, #087990 100%); }
     .bg-gradient-purple { background: linear-gradient(135deg, #6f42c1 0%, #4e2a84 100%); }
 
+    /* Timeline */
     .timeline-item {
         border-left: 2px solid #e9ecef;
         padding-left: 15px;
@@ -47,19 +50,49 @@
     }
     .timeline-pos::before { background-color: #198754; }
     .timeline-neg::before { background-color: #dc3545; }
+
+    /* --- RESPONSIVE OPTIMIZATION --- */
+    @media (max-width: 767.98px) {
+        .glass-card {
+            padding: 0.75rem !important; /* Padding lebih kecil di HP */
+        }
+        .icon-box {
+            width: 36px;
+            height: 36px;
+            font-size: 1.2rem; /* Ikon mengecil di HP */
+            margin-bottom: 0.5rem !important;
+        }
+        .glass-card h4 {
+            font-size: 1.2rem !important; /* Angka statistik mengecil */
+        }
+        .glass-card h6 {
+            font-size: 0.7rem !important; /* Teks label mengecil */
+        }
+        .akses-cepat-icon i {
+            font-size: 1.5rem !important;
+        }
+        .date-badge {
+            font-size: 0.8rem !important;
+            padding: 0.5rem 1rem !important;
+        }
+        .welcome-title {
+            font-size: 1.25rem !important;
+        }
+    }
 </style>
 
-<div class="container-fluid py-2">
+<div class="container-fluid py-2 px-3 px-md-4">
+    <!-- Header Section -->
     <div class="row mb-4 align-items-center g-3">
         <div class="col-12 col-md-8">
             <div class="d-flex align-items-center flex-column flex-sm-row text-center text-sm-start">
                 <img src="{{ asset('images/logo_edusparc.jpeg') }}" alt="Logo" class="mb-3 mb-sm-0 me-sm-3" style="height: 60px; width: auto;">
                 <div>
-                    <h3 class="fw-bold mb-1 text-dark">Selamat Datang, {{ session('name') }}! 👋</h3>
-                    <p class="text-muted mb-0">
+                    <h3 class="fw-bold mb-1 text-dark welcome-title">Selamat Datang, {{ session('name') }}!</h3>
+                    <p class="text-muted mb-0 small">
                         Anda login sebagai
                         @if(session('role') == 'admin')
-                            <span class="badge bg-primary">Super Admin</span>
+                            <span class="badge bg-primary">Admin</span>
                         @else
                             <span class="badge bg-success">Guru / Tenaga Pendidik</span>
                         @endif
@@ -69,14 +102,15 @@
             </div>
         </div>
         <div class="col-12 col-md-4 text-center text-md-end">
-            <div class="badge bg-white text-dark p-3 fs-6 shadow-sm border rounded-pill d-inline-block">
+            <div class="badge bg-white text-dark p-3 fs-6 shadow-sm border rounded-pill d-inline-block date-badge">
                 <i class="bi bi-calendar-event text-primary me-2"></i>
                 <span id="datetime" class="fw-semibold"></span> WIB
             </div>
         </div>
     </div>
 
-    <div class="row g-3 mb-4">
+    <!-- Statistik Utama -->
+    <div class="row g-2 g-md-3 mb-4">
         <div class="col-6 col-md-4 col-xl-2">
             <div class="glass-card p-3 d-flex flex-column align-items-center text-center h-100">
                 <div class="icon-box bg-info text-white mb-2 bg-gradient-info"><i class="bi bi-person-badge-fill"></i></div>
@@ -101,7 +135,7 @@
         <div class="col-6 col-md-4 col-xl-2">
             <div class="glass-card p-3 d-flex flex-column align-items-center text-center h-100">
                 <div class="icon-box bg-warning text-dark mb-2 bg-gradient-warning"><i class="bi bi-exclamation-triangle-fill"></i></div>
-                <h6 class="text-muted mb-1 small fw-bold">kasus Bulan Ini</h6>
+                <h6 class="text-muted mb-1 small fw-bold">Kasus Bulan Ini</h6>
                 <h4 class="fw-bold mb-0">{{ $kasus_bulan_ini }}</h4>
             </div>
         </div>
@@ -121,51 +155,53 @@
         </div>
     </div>
 
-    <h5 class="fw-bold text-dark mb-3">Akses Cepat</h5>
-    <div class="row g-3 mb-4 text-center">
-        <div class="col-6 col-sm-4 col-lg-2">
+    <!-- Akses Cepat -->
+    <h5 class="fw-bold text-dark mb-3 fs-5">Akses Cepat</h5>
+    <div class="row g-2 g-md-3 mb-4 text-center">
+        <div class="col-4 col-sm-4 col-lg-2">
             <a href="/guru" class="glass-card hover-lift p-3 text-decoration-none text-dark d-block h-100 border-info border-opacity-25">
-                <div class="text-info mb-2"><i class="bi bi-person-badge fs-2"></i></div>
+                <div class="text-info mb-2 akses-cepat-icon"><i class="bi bi-person-badge fs-2"></i></div>
                 <h6 class="mb-0 small fw-semibold">Data Guru</h6>
             </a>
         </div>
-        <div class="col-6 col-sm-4 col-lg-2">
+        <div class="col-4 col-sm-4 col-lg-2">
             <a href="/siswa" class="glass-card hover-lift p-3 text-decoration-none text-dark d-block h-100">
-                <div class="text-success mb-2"><i class="bi bi-person-vcard fs-2"></i></div>
+                <div class="text-success mb-2 akses-cepat-icon"><i class="bi bi-person-vcard fs-2"></i></div>
                 <h6 class="mb-0 small fw-semibold">Data Siswa</h6>
             </a>
         </div>
-        <div class="col-6 col-sm-4 col-lg-2">
+        <div class="col-4 col-sm-4 col-lg-2">
             <a href="/kelas" class="glass-card hover-lift p-3 text-decoration-none text-dark d-block h-100">
-                <div class="text-secondary mb-2"><i class="bi bi-door-open fs-2"></i></div>
+                <div class="text-secondary mb-2 akses-cepat-icon"><i class="bi bi-door-open fs-2"></i></div>
                 <h6 class="mb-0 small fw-semibold">Data Kelas</h6>
             </a>
         </div>
-        <div class="col-6 col-sm-4 col-lg-2">
+        <div class="col-4 col-sm-4 col-lg-2">
             <a href="/pelanggaran" class="glass-card hover-lift p-3 text-decoration-none text-dark d-block h-100 border-danger border-opacity-25">
-                <div class="text-danger mb-2"><i class="bi bi-shield-exclamation fs-2"></i></div>
-                <h6 class="mb-0 small fw-semibold">Input Karakter</h6>
+                <div class="text-danger mb-2 akses-cepat-icon"><i class="bi bi-shield-exclamation fs-2"></i></div>
+                <h6 class="mb-0 small fw-semibold">Karakter</h6>
             </a>
         </div>
-        <div class="col-6 col-sm-4 col-lg-2">
+        <div class="col-4 col-sm-4 col-lg-2">
             <a href="#" data-bs-toggle="modal" data-bs-target="#modalLaporan" class="glass-card hover-lift p-3 text-center text-decoration-none text-dark d-block h-100 border-warning border-opacity-25">
-                <div class="text-warning mb-2"><i class="bi bi-file-earmark-bar-graph fs-2"></i></div>
+                <div class="text-warning mb-2 akses-cepat-icon"><i class="bi bi-file-earmark-bar-graph fs-2"></i></div>
                 <h6 class="mb-0 small fw-semibold">Laporan</h6>
             </a>
         </div>
-        <div class="col-6 col-sm-4 col-lg-2">
+        <div class="col-4 col-sm-4 col-lg-2">
             <a href="/pengaturan" class="glass-card hover-lift p-3 text-decoration-none text-dark d-block h-100">
-                <div class="text-primary mb-2"><i class="bi bi-gear-fill fs-2"></i></div>
+                <div class="text-primary mb-2 akses-cepat-icon"><i class="bi bi-gear-fill fs-2"></i></div>
                 <h6 class="mb-0 small fw-semibold">Pengaturan</h6>
             </a>
         </div>
     </div>
 
-    <div class="row g-4">
+    <!-- Grafik & Aktivitas -->
+    <div class="row g-3 g-md-4">
         <div class="col-12 col-lg-8">
-            <div class="glass-card p-4 h-100">
-                <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-3 g-2">
-                    <h5 class="fw-bold mb-0"><i class="bi bi-graph-up-arrow text-primary me-2"></i>Grafik Perkembangan Sikap & Karakter</h5>
+            <div class="glass-card p-3 p-md-4 h-100">
+                <div class="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-3">
+                    <h5 class="fw-bold mb-0 fs-6 fs-md-5"><i class="bi bi-graph-up-arrow text-primary me-2"></i>Grafik Karakter</h5>
                     <span class="badge bg-light text-dark p-2 border mt-2 mt-sm-0">6 Bulan Terakhir</span>
                 </div>
                 <div style="position: relative; height: 300px; width: 100%;">
@@ -175,18 +211,18 @@
         </div>
 
         <div class="col-12 col-lg-4">
-            <div class="glass-card p-4 h-100">
-                <h5 class="fw-bold mb-4"><i class="bi bi-clock-history text-warning me-2"></i>Aktivitas Terakhir</h5>
+            <div class="glass-card p-3 p-md-4 h-100">
+                <h5 class="fw-bold mb-4 fs-6 fs-md-5"><i class="bi bi-clock-history text-warning me-2"></i>Aktivitas Terakhir</h5>
                 <div class="timeline">
                     @forelse($aktivitas_terbaru as $akt)
                     <div class="timeline-item {{ $akt->jenis_poin == 'positif' ? 'timeline-pos' : 'timeline-neg' }}">
-                        <div class="fw-bold text-dark">{{ $akt->student->name ?? 'Siswa Terhapus' }} ({{ $akt->student->class ?? '-' }})</div>
+                        <div class="fw-bold text-dark small">{{ $akt->student->name ?? 'Siswa Terhapus' }} ({{ $akt->student->class ?? '-' }})</div>
                         @if($akt->jenis_poin == 'positif')
-                            <small class="text-success d-block fw-semibold">{{ $akt->type }} (+{{ $akt->points }} Poin Kebaikan)</small>
+                            <small class="text-success d-block fw-semibold">{{ $akt->type }} (+{{ $akt->points }})</small>
                         @else
-                            <small class="text-danger d-block fw-semibold">{{ $akt->type }} (-{{ $akt->points }} Poin Pelanggaran)</small>
+                            <small class="text-danger d-block fw-semibold">{{ $akt->type }} (-{{ $akt->points }})</small>
                         @endif
-                        <small class="text-muted fst-italic" style="font-size: 0.75rem;">
+                        <small class="text-muted fst-italic" style="font-size: 0.7rem;">
                             {{ \Carbon\Carbon::parse($akt->created_at)->diffForHumans() }}
                         </small>
                     </div>
@@ -198,7 +234,7 @@
                     @endforelse
                 </div>
                 <div class="mt-3 text-center">
-                    <a href="/pelanggaran" class="text-decoration-none text-primary fw-semibold" style="font-size: 0.9rem;">Lihat Semua Aktivitas &rarr;</a>
+                    <a href="/pelanggaran" class="text-decoration-none text-primary fw-semibold small">Lihat Semua &rarr;</a>
                 </div>
             </div>
         </div>

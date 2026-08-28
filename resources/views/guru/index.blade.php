@@ -8,10 +8,20 @@
         border: 1px solid rgba(0,0,0,0.05);
         box-shadow: 0 4px 20px rgba(0,0,0,0.03);
     }
+    /* Memastikan input pencarian full width di mobile, tapi terbatas di desktop */
+    .search-box {
+        width: 100%;
+    }
+    @media (min-width: 768px) {
+        .search-box {
+            width: 250px;
+        }
+    }
 </style>
 
 <div class="container-fluid py-2">
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4">
+    <!-- Header Section: Stack di mobile (flex-column), sejajar di desktop (flex-md-row) -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-4 gap-3">
         <div>
             <h3 class="fw-bold text-dark mb-0">
                 <i class="bi bi-person-badge text-primary me-2"></i>Manajemen Data Guru
@@ -21,11 +31,11 @@
 
         {{-- Tombol Tambah & Export hanya muncul untuk Admin --}}
         @if(session('role') === 'admin')
-        <div class="mt-3 mt-md-0 d-flex gap-2">
-            <button type="button" class="btn btn-outline-success shadow-sm rounded-pill px-4" data-bs-toggle="modal" data-bs-target="#modalImportGuru">
+        <div class="d-flex flex-column flex-sm-row gap-2 w-100 justify-content-md-end" style="max-width: 400px;">
+            <button type="button" class="btn btn-outline-success shadow-sm rounded-pill px-4 flex-fill" data-bs-toggle="modal" data-bs-target="#modalImportGuru">
                 <i class="bi bi-file-earmark-excel me-1"></i> Import Excel
             </button>
-            <a href="/guru/create" class="btn btn-primary shadow-sm rounded-pill px-4">
+            <a href="/guru/create" class="btn btn-primary shadow-sm rounded-pill px-4 flex-fill text-center">
                 <i class="bi bi-plus-circle me-1"></i> Tambah Guru
             </a>
         </div>
@@ -46,25 +56,27 @@
         </div>
     @endif
 
-    <div class="glass-card p-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="glass-card p-3 p-md-4">
+        <!-- Toolbar Card: Stack di mobile -->
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 gap-3">
             <h5 class="fw-bold text-dark m-0"><i class="bi bi-list-ul text-primary me-2"></i>Daftar Guru Aktif</h5>
-            <div class="input-group" style="width: 250px;">
-                <input type="text" class="form-control form-control-sm bg-light border-secondary" placeholder="Cari nama guru...">
-                <button class="btn btn-sm btn-outline-secondary"><i class="bi bi-search"></i></button>
+            <div class="input-group search-box">
+                <input type="text" class="form-control bg-light border-secondary" placeholder="Cari nama guru...">
+                <button class="btn btn-outline-secondary"><i class="bi bi-search"></i></button>
             </div>
         </div>
 
         <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
+            <!-- Tambahkan text-nowrap agar teks tidak terlipat berantakan di layar kecil -->
+            <table class="table table-hover align-middle mb-0 text-nowrap">
                 <thead class="table-light text-secondary">
                     <tr>
-                        <th width="5%" class="text-center rounded-start">No</th>
-                        <th width="15%">NIP/NUPTK</th>
-                        <th width="25%">Nama Guru</th>
-                        <th width="20%">Mata Pelajaran</th>
-                        <th width="20%">Tugas Tambahan / Peran</th>
-                        <th width="15%" class="text-center rounded-end">Aksi</th>
+                        <th class="text-center rounded-start">No</th>
+                        <th>NIP/NUPTK</th>
+                        <th>Nama Guru</th>
+                        <th>Mata Pelajaran</th>
+                        <th>Tugas Tambahan / Peran</th>
+                        <th class="text-center rounded-end">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>

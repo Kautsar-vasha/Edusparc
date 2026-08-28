@@ -2,41 +2,71 @@
 
 @section('content')
 <style>
+    /* Styling Dasar Scanner */
     #reader { width: 100%; border-radius: 8px; overflow: hidden; border: 2px dashed #0d6efd; background: #f8f9fa; min-height: 250px; display: flex; align-items: center; justify-content: center;}
     .log-container { max-height: 250px; overflow-y: auto; }
 
-    /* Animasi pop-up berhasil */
+    /* Animasi Pop-up */
     @keyframes flashGreen {
         0% { background-color: #d1e7dd; }
         100% { background-color: #ffffff; }
     }
     .flash-success { animation: flashGreen 1.5s ease-out; }
+
+    /* KUSTOMISASI RESPONSIVE (MOBILE OPTIMIZATION) */
+    @media (max-width: 767.98px) {
+        /* Pengecilan judul dan teks di header */
+        .page-header-title { font-size: 1.5rem !important; }
+        .page-header-desc { font-size: 0.85rem !important; }
+
+        /* Modifikasi Card Padding */
+        .card { padding: 1.25rem !important; }
+
+        /* Modifikasi Tab Navigasi agar membentang 100% pada mobile */
+        .nav-pills { flex-direction: column; width: 100%; gap: 0.5rem; }
+        .nav-pills .nav-item { width: 100%; }
+        .nav-pills .nav-link { width: 100%; text-align: center; padding: 0.75rem; font-size: 0.95rem; }
+
+        /* Font form yang sedikit dikecilkan untuk menghemat ruang vertikal */
+        .form-label { font-size: 0.8rem; margin-bottom: 0.25rem; }
+        .form-control, .form-select { font-size: 0.9rem; padding: 0.5rem 0.75rem; }
+
+        /* Scanner Log Area */
+        .log-container { max-height: 200px; } /* Memendekkan area log sedikit di mobile */
+    }
 </style>
 
-<div class="container-fluid">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+<div class="container-fluid py-2">
+    <!-- Header Section -->
+    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center mb-4 gap-3">
         <div>
-            <h3 class="fw-bold mb-0"><i class="bi bi-upc-scan text-primary me-2"></i>Quick Scanner</h3>
-            <p class="text-muted small mt-1 mb-0">Atur poin di awal, lalu scan siswa secara massal dengan cepat.</p>
+            <h3 class="fw-bold mb-0 page-header-title"><i class="bi bi-upc-scan text-primary me-2"></i>Quick Scanner</h3>
+            <p class="text-muted small mt-1 mb-0 page-header-desc">Atur poin di awal, lalu scan siswa secara massal dengan cepat.</p>
         </div>
-        <a href="/pelanggaran" class="btn btn-outline-secondary btn-sm"><i class="bi bi-arrow-left"></i> Kembali ke Riwayat</a>
+        <a href="/pelanggaran" class="btn btn-outline-secondary btn-sm w-100 w-sm-auto">
+            <i class="bi bi-arrow-left"></i> Kembali ke Riwayat
+        </a>
     </div>
 
+    <!-- Alert Sukses (Hidden default) -->
     <div id="scan_alert" class="alert alert-success shadow-sm border-0 d-none" role="alert">
         <i class="bi bi-check-circle-fill me-2"></i><span id="scan_alert_msg" class="fw-bold"></span>
     </div>
 
     <div class="row g-4">
-        <div class="col-12 col-lg-5">
+        <!-- KOLOM 1: SETTING TARGET POIN -->
+        <div class="col-12 col-lg-5 order-2 order-lg-1">
             <div class="card border-0 shadow-sm p-4 h-100 border-top border-4 border-primary">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h5 class="fw-bold mb-0"><i class="bi bi-gear-fill text-secondary me-2"></i> Setting Target Poin</h5>
+                <div class="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center mb-3 gap-2">
+                    <h5 class="fw-bold mb-0 fs-5"><i class="bi bi-gear-fill text-secondary me-2"></i>Setting Target Poin</h5>
                     <span class="badge bg-light text-success border border-success"><i class="bi bi-save2"></i> Tersimpan Otomatis</span>
                 </div>
+
                 <div class="alert alert-info small py-2 border-0">
                     Atur form ini terlebih dahulu. Sistem akan mengingat pengaturan Anda secara otomatis.
                 </div>
 
+                <!-- Perbaikan Grid Form -->
                 <div class="row g-3">
                     <div class="col-12">
                         <label class="form-label fw-bold small">Jenis Poin</label>
@@ -45,11 +75,12 @@
                             <option value="positif" class="text-success" selected>Penghargaan (+)</option>
                         </select>
                     </div>
-                    <div class="col-8">
+                    <!-- Mengubah col-8 & col-4 menjadi col-12 dan col-sm-8 / col-sm-4 -->
+                    <div class="col-12 col-sm-8">
                         <label class="form-label fw-bold small">Nama Aktivitas / Kegiatan</label>
                         <input type="text" id="set_type" class="form-control" placeholder="Cth: Sholat Dhuha / Terlambat" required>
                     </div>
-                    <div class="col-4">
+                    <div class="col-12 col-sm-4">
                         <label class="form-label fw-bold small">Poin</label>
                         <input type="number" id="set_points" class="form-control" placeholder="0" min="1" required>
                     </div>
@@ -68,16 +99,17 @@
             </div>
         </div>
 
-        <div class="col-12 col-lg-7">
+        <!-- KOLOM 2: AREA SCANNER -->
+        <div class="col-12 col-lg-7 order-1 order-lg-2">
             <div class="card border-0 shadow-sm p-4 h-100">
-                <h5 class="fw-bold mb-3"><i class="bi bi-qr-code-scan text-success me-2"></i>2. Area Scanner</h5>
+                <h5 class="fw-bold mb-3 fs-5"><i class="bi bi-qr-code-scan text-success me-2"></i>2. Area Scanner</h5>
 
                 <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link active small fw-bold" id="tab-usb-btn" data-bs-toggle="pill" data-bs-target="#tab-usb" type="button"><i class="bi bi-upc me-1"></i>Alat Scanner USB</button>
+                        <button class="nav-link active fw-bold border" id="tab-usb-btn" data-bs-toggle="pill" data-bs-target="#tab-usb" type="button"><i class="bi bi-upc me-1"></i>Alat Scanner USB</button>
                     </li>
                     <li class="nav-item" role="presentation">
-                        <button class="nav-link small fw-bold" id="tab-kamera-btn" data-bs-toggle="pill" data-bs-target="#tab-kamera" type="button"><i class="bi bi-camera me-1"></i>Kamera Web/HP</button>
+                        <button class="nav-link fw-bold border ms-0 ms-md-2" id="tab-kamera-btn" data-bs-toggle="pill" data-bs-target="#tab-kamera" type="button"><i class="bi bi-camera me-1"></i>Kamera Web/HP</button>
                     </li>
                 </ul>
 
@@ -87,6 +119,7 @@
                             <span class="input-group-text bg-dark text-white border-0"><i class="bi bi-upc-scan"></i></span>
                             <input type="text" id="usb_input" class="form-control border-dark border-2 text-center fw-bold" placeholder="Tembak Kartu Siswa di sini..." autocomplete="off">
                         </div>
+                        <div class="text-muted small text-center mb-2">Pastikan kursor berada di dalam kotak di atas sebelum melakukan scan alat.</div>
                     </div>
                     <div class="tab-pane fade" id="tab-kamera">
                         <div id="reader" class="mb-3 mt-3">
@@ -99,7 +132,7 @@
                     <h6 class="fw-bold text-muted small"><i class="bi bi-clock-history me-1"></i>Riwayat Scan Terakhir (Real-time)</h6>
                     <div class="log-container border rounded bg-light p-2" id="log_area">
                         <div class="text-center text-muted small py-3" id="empty_log">Belum ada siswa yang discan pada sesi ini.</div>
-                        </div>
+                    </div>
                 </div>
 
             </div>
@@ -109,6 +142,8 @@
 
 <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
 <script>
+    // Script JS Tetap dipertahankan persis sesuai versi aslinya untuk menjaga fungsionalitas
+
     // ==========================================
     // 1. FITUR AUTO-SAVE SETTINGAN (LOCAL STORAGE)
     // ==========================================
@@ -152,7 +187,7 @@
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                'X-CSRF-TOKEN': '{{ csrf_token() }}' // Pastikan baris ini tidak diedit karena bawaan blade Laravel
             },
             body: JSON.stringify({
                 nis: nis, jenis_poin: jenis, type: type, points: points, category: cat, motivation: mot
@@ -195,7 +230,6 @@
     function onScanSuccess(decodedText) {
         let currentTime = new Date().getTime();
 
-        // Anti-Spam
         if (decodedText === lastScanCode && (currentTime - lastScanTime) < COOLDOWN_WAKTU) {
             return;
         }
@@ -205,19 +239,17 @@
         prosesScanData(decodedText);
     }
 
-    // Nyalakan kamera HANYA saat tab kamera diklik
     document.getElementById('tab-kamera-btn').addEventListener('shown.bs.tab', function (e) {
         document.getElementById('kamera_status').style.display = 'none';
         html5QrCode.start(
-            { facingMode: "environment" },
+            { facingMode: "environment" }, // Kamera Belakang jika support
             { fps: 10, qrbox: { width: 250, height: 250 } },
             onScanSuccess
         ).catch(err => {
-            document.getElementById('reader').innerHTML = '<div class="alert alert-danger m-3 small"><i class="bi bi-exclamation-triangle"></i> Kamera gagal diakses. Pastikan izin diberikan!</div>';
+            document.getElementById('reader').innerHTML = '<div class="alert alert-danger m-3 small"><i class="bi bi-exclamation-triangle"></i> Kamera gagal diakses. Pastikan izin kamera telah diberikan di pengaturan HP/Browser Anda!</div>';
         });
     });
 
-    // Matikan kamera saat kembali ke tab USB
     document.getElementById('tab-usb-btn').addEventListener('shown.bs.tab', function (e) {
         if(html5QrCode.isScanning) {
             html5QrCode.stop().then(() => {

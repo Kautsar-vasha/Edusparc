@@ -4,20 +4,114 @@
 <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
 
-<div class="container-fluid">
-    <h3 class="mb-4 fw-bold">Input Pencatatan Karakter Siswa</h3>
+<style>
+    /* Penyesuaian khusus tampilan mobile */
+    @media (max-width: 767.98px) {
+        .card {
+            padding: 1.25rem !important;
+        }
+        h3 {
+            font-size: 1.5rem;
+        }
+        .btn-filter-group {
+            flex-direction: column;
+        }
+        .btn-filter-group .btn {
+            width: 100%;
+        }
+        /* Penyesuaian lebar alert di mobile */
+        .animated-alert {
+            min-width: 90vw !important;
+            margin-right: 5vw !important;
+        }
+    }
 
-    @if(session('success'))
-        <div class="alert alert-success border-0 shadow-sm mb-4">{{ session('success') }}</div>
-    @endif
-    @if($errors->any())
-        <div class="alert alert-danger border-0 shadow-sm mb-4">Pastikan gambar sesuai ukuran maksimal (2MB) dan berformat JPG/PNG.</div>
-    @endif
+    /* Memaksa tabel agar bisa digeser (scroll horizontal) di mobile */
+    .table-custom-responsive th,
+    .table-custom-responsive td {
+        white-space: normal;
+        word-break: break-word;
+    }
+
+    /* =========================================
+       KUSTOMISASI ANIMASI ALERT NOTIFIKASI
+       ========================================= */
+    @keyframes slideInRight {
+        0% { transform: translateX(110%); opacity: 0; }
+        100% { transform: translateX(0); opacity: 1; }
+    }
+
+    @keyframes slideOutRight {
+        0% { transform: translateX(0); opacity: 1; }
+        100% { transform: translateX(110%); opacity: 0; }
+    }
+
+    @keyframes progressShrink {
+        0% { width: 100%; }
+        100% { width: 0%; }
+    }
+
+    .animated-alert {
+        animation: slideInRight 0.5s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+        min-width: 320px;
+        position: relative;
+        overflow: hidden; /* Agar progress bar tidak keluar dari radius border */
+        border-radius: 8px;
+    }
+
+    .animated-alert.hide-alert {
+        animation: slideOutRight 0.5s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+    }
+
+    .alert-progress {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 4px;
+        width: 100%;
+        /* Durasi ini disesuaikan dengan setTimeout di javascript (4 detik) */
+        animation: progressShrink 4s linear forwards;
+    }
+</style>
+
+<div class="container-fluid py-2">
+    <!-- WADAH NOTIFIKASI FLOATING (TOAST) -->
+    <div class="alert-container position-fixed top-0 end-0 p-3 mt-5" style="z-index: 1055;">
+        @if(session('success'))
+            <div class="alert alert-success alert-dismissible fade show animated-alert border-0 shadow-lg bg-white" role="alert">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-check-circle-fill fs-3 text-success me-3"></i>
+                    <div>
+                        <h6 class="fw-bold mb-0 text-success">Berhasil!</h6>
+                        <span class="small text-muted">{{ session('success') }}</span>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <div class="alert-progress bg-success"></div>
+            </div>
+        @endif
+
+        @if($errors->any())
+            <div class="alert alert-danger alert-dismissible fade show animated-alert border-0 shadow-lg bg-white" role="alert">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-exclamation-triangle-fill fs-3 text-danger me-3"></i>
+                    <div>
+                        <h6 class="fw-bold mb-0 text-danger">Upload Gagal!</h6>
+                        <span class="small text-muted">Pastikan gambar maks 2MB (JPG/PNG).</span>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                <div class="alert-progress bg-danger"></div>
+            </div>
+        @endif
+    </div>
+    <!-- AKHIR WADAH NOTIFIKASI -->
+
+    <h3 class="mb-4 fw-bold">Input Pencatatan Karakter Siswa</h3>
 
     <div class="card shadow-sm p-4 mb-4 border-0">
         <h5 class="fw-bold mb-3 text-dark"><i class="bi bi-plus-circle-fill text-primary me-2"></i>Form Tambah Catatan</h5>
 
-        {{-- TAMBAHKAN ENCTYPE AGAR BISA KIRIM GAMBAR --}}
         <form action="/pelanggaran" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="row g-3">
@@ -74,7 +168,6 @@
                     <textarea name="motivation" class="form-control" rows="2"></textarea>
                 </div>
 
-                {{-- INPUT BUKTI FOTO OPSIONAL --}}
                 <div class="col-12 mt-3">
                     <label class="form-label fw-bold small text-primary"><i class="bi bi-camera-fill me-1"></i>Unggah Bukti Foto (Opsional)</label>
                     <input type="file" name="bukti_foto" class="form-control border-primary shadow-sm" accept="image/jpeg,image/png,image/jpg" style="max-width: 400px;">
@@ -82,7 +175,7 @@
                 </div>
 
                 <div class="col-12 mt-4 text-end text-sm-start">
-                    <button type="submit" class="btn btn-primary px-4 fw-semibold shadow-sm">
+                    <button type="submit" class="btn btn-primary w-100 w-sm-auto px-4 fw-semibold shadow-sm">
                         <i class="bi bi-save me-1"></i> Simpan Data Karakter
                     </button>
                 </div>
@@ -90,7 +183,7 @@
         </form>
     </div>
 
-    <!-- FILTER RIWAYAT (Tetap Sama) -->
+    <!-- FILTER RIWAYAT -->
     <div class="card shadow-sm p-4 border-0 bg-white mb-4">
         <h5 class="fw-bold mb-3 text-dark"><i class="bi bi-search me-2 text-secondary"></i>Filter & Cari Riwayat</h5>
         <form action="/pelanggaran" method="GET">
@@ -119,7 +212,7 @@
                         <option value="terlama" {{ request('sort_waktu') == 'terlama' ? 'selected' : '' }}>Terlama</option>
                     </select>
                 </div>
-                <div class="col-12 col-sm-6 col-md-3 d-flex gap-2">
+                <div class="col-12 col-sm-6 col-md-3 d-flex gap-2 btn-filter-group">
                     <button type="submit" class="btn btn-sm btn-secondary flex-fill fw-semibold"><i class="bi bi-funnel"></i> Terapkan</button>
                     <a href="/pelanggaran" class="btn btn-sm btn-light border flex-fill text-center">Reset</a>
                 </div>
@@ -131,14 +224,14 @@
     <div class="card shadow-sm p-4 border-0">
         <h5 class="fw-bold mb-3 text-dark">Riwayat Catatan Karakter Terbaru</h5>
         <div class="table-responsive">
-            <table class="table table-hover align-middle min-w-600 mb-0">
+            <table class="table table-hover align-middle table-custom-responsive mb-0" style="min-width: 800px;">
                 <thead class="table-light">
                     <tr>
-                        <th style="width: 15%">Waktu</th>
-                        <th style="width: 25%">Nama Siswa</th>
-                        <th style="width: 35%">Aktivitas & Bukti</th>
-                        <th style="width: 10%">Poin</th>
-                        <th style="width: 15%" class="text-center">Aksi</th>
+                        <th style="min-width: 120px;">Waktu</th>
+                        <th style="min-width: 160px;">Nama Siswa</th>
+                        <th style="min-width: 250px;">Aktivitas & Bukti</th>
+                        <th style="min-width: 90px;">Poin</th>
+                        <th style="min-width: 120px;" class="text-center">Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -164,28 +257,11 @@
                             <span class="fw-semibold text-dark">{{ $v->type }}</span>
                             <span class="badge bg-secondary ms-1 small">{{ $v->category }}</span><br>
 
-                            {{-- TAMPILKAN TOMBOL LIHAT BUKTI JIKA ADA FOTO --}}
                             @if($v->bukti_foto)
                                 <button type="button" class="btn btn-sm btn-outline-primary mt-2 rounded-pill px-3 py-0" data-bs-toggle="modal" data-bs-target="#modalFoto{{ $v->id }}">
                                     <i class="bi bi-image me-1"></i> Lihat Bukti
                                 </button>
-
-                                {{-- Modal Menampilkan Foto --}}
-                                <div class="modal fade" id="modalFoto{{ $v->id }}" tabindex="-1" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered">
-                                        <div class="modal-content border-0 shadow">
-                                            <div class="modal-header bg-dark text-white border-0">
-                                                <h6 class="modal-title"><i class="bi bi-camera me-2"></i>Bukti Visual</h6>
-                                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                                            </div>
-                                            <div class="modal-body text-center p-2 bg-light">
-                                                <img src="{{ asset('storage/' . $v->bukti_foto) }}" class="img-fluid rounded shadow-sm" alt="Bukti Kejadian">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
                             @endif
-
                         </td>
                         <td class="fw-bold {{ $v->jenis_poin == 'positif' ? 'text-success' : 'text-danger' }}">
                             {{ $v->jenis_poin == 'positif' ? '+' : '-' }}{{ $v->points }}
@@ -196,24 +272,6 @@
                                     <button type="button" class="btn btn-sm {{ $v->tanggapan_ortu ? 'btn-info text-white' : 'btn-outline-info' }}" data-bs-toggle="modal" data-bs-target="#modalTanggapan{{ $v->id }}" title="Lihat Ulasan">
                                         <i class="bi bi-chat-dots"></i>
                                     </button>
-                                    <div class="modal fade" id="modalTanggapan{{ $v->id }}" tabindex="-1" aria-hidden="true">
-                                        <div class="modal-dialog modal-dialog-centered">
-                                            <div class="modal-content border-0 shadow">
-                                                <div class="modal-header bg-info text-white border-0">
-                                                    <h5 class="modal-title fw-bold"><i class="bi bi-chat-dots me-2"></i>Tanggapan Wali Murid</h5>
-                                                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                                                </div>
-                                                <div class="modal-body p-4 bg-light text-start">
-                                                    @if($v->tanggapan_ortu)
-                                                        <span class="badge bg-success mb-2"><i class="bi bi-check-circle me-1"></i>Sudah Dibaca</span>
-                                                        <p class="text-dark fst-italic border-start border-3 border-info ps-3">"{{ $v->tanggapan_ortu }}"</p>
-                                                    @else
-                                                        <div class="text-center py-4 text-muted">Belum ada tanggapan.</div>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
                                 @else
                                     <button type="button" class="btn btn-sm btn-outline-secondary bg-light" disabled><i class="bi bi-lock-fill text-muted"></i></button>
                                 @endif
@@ -239,6 +297,24 @@
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
     $(document).ready(function() {
+        // =========================================
+        // LOGIKA AUTO-CLOSE ALERT DENGAN ANIMASI
+        // =========================================
+        setTimeout(() => {
+            $('.animated-alert').each(function() {
+                // Tambahkan class animasi keluar
+                $(this).addClass('hide-alert');
+
+                // Tunggu 500ms (sampai animasi selesai) baru elemen dihilangkan dari DOM
+                setTimeout(() => {
+                    $(this).remove();
+                }, 500);
+            });
+        }, 4000); // Alert tampil selama 4 detik
+
+        // =========================================
+        // SCRIPT FORM SEBELUMNYA
+        // =========================================
         $('.select2-basic').select2({ theme: 'bootstrap-5', width: '100%' });
         $('#select-tatib').select2({ theme: 'bootstrap-5', placeholder: "-- Ketik Mencari Aturan... --", width: '100%' });
 

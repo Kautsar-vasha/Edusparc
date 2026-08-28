@@ -49,8 +49,9 @@
     <div class="row">
         {{-- Form Tambah Kelas HANYA tampil untuk Admin --}}
         @if(session('role') === 'admin')
-        <div class="col-md-4 mb-4">
-            <div class="glass-card p-4 border-top border-4 border-primary">
+        <div class="col-12 col-md-4 mb-4">
+            {{-- Mengubah padding menjadi p-3 di mobile, p-md-4 di desktop --}}
+            <div class="glass-card p-3 p-md-4 border-top border-4 border-primary">
                 <h5 class="fw-bold mb-3"><i class="bi bi-plus-circle text-primary me-2"></i>Tambah Kelas</h5>
                 <form action="/kelas" method="POST">
                     @csrf
@@ -59,16 +60,17 @@
                         <input type="text" name="nama_kelas" class="form-control" placeholder="Contoh: VII A, VIII B, IX C" required>
                     </div>
                     <button type="submit" class="btn btn-primary w-100 fw-semibold shadow-sm">
-                        <i class="bi bi-save me-1"></i> Simpan Kelas
+                        <i class="bi bi-save me-1"></i> Simpan
                     </button>
                 </form>
             </div>
         </div>
         @endif
 
-        {{-- Tabel Kelas melebar penuh (col-12) jika Guru, namun col-8 jika Admin --}}
-        <div class="{{ session('role') === 'admin' ? 'col-md-8' : 'col-md-12' }}">
-            <div class="glass-card p-4">
+        {{-- Tabel Kelas melebar penuh (col-12) jika Guru, namun col-md-8 jika Admin --}}
+        <div class="col-12 {{ session('role') === 'admin' ? 'col-md-8' : '' }}">
+            {{-- Mengubah padding menjadi p-3 di mobile, p-md-4 di desktop --}}
+            <div class="glass-card p-3 p-md-4">
                 <h5 class="fw-bold mb-3"><i class="bi bi-list-ul text-primary me-2"></i>Daftar Kelas</h5>
 
                 @if(session('role') === 'guru')
@@ -77,7 +79,8 @@
 
                 <div class="table-responsive">
                     <table class="table table-hover align-middle mb-0">
-                        <thead class="table-light text-muted">
+                        {{-- Tambah text-nowrap agar header tidak terlipat berantakan --}}
+                        <thead class="table-light text-muted text-nowrap">
                             <tr>
                                 <th width="10%" class="text-center rounded-start">No</th>
                                 <th>Nama Kelas</th>
@@ -95,7 +98,7 @@
                                 <td>
                                     {{-- Nama Kelas sekarang menjadi link yang bisa diklik --}}
                                     <a href="/kelas/{{ $k->id }}" class="text-decoration-none link-kelas">
-                                        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary rounded-pill px-3 py-2 fs-6">
+                                        <span class="badge bg-primary bg-opacity-10 text-primary border border-primary rounded-pill px-3 py-2 fs-6 text-wrap">
                                             <i class="bi bi-people me-1"></i> {{ $k->nama_kelas }}
                                         </span>
                                     </a>
@@ -104,16 +107,17 @@
                                 {{-- Tombol Aksi HANYA tampil untuk Admin --}}
                                 @if(session('role') === 'admin')
                                 <td class="text-center">
-                                    <div class="d-flex justify-content-center gap-2">
-                                        <button type="button" class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#editModal{{ $k->id }}" title="Edit Kelas">
-                                            <i class="bi bi-pencil-square"></i> Edit
+                                    {{-- Tambah flex-wrap dan sembunyikan teks tombol di mobile --}}
+                                    <div class="d-flex justify-content-center gap-1 gap-md-2 flex-wrap">
+                                        <button type="button" class="btn btn-sm btn-outline-primary shadow-sm" data-bs-toggle="modal" data-bs-target="#editModal{{ $k->id }}" title="Edit Kelas">
+                                            <i class="bi bi-pencil-square"></i> <span class="d-none d-sm-inline">Edit</span>
                                         </button>
 
                                         <form action="/kelas/{{ $k->id }}" method="POST" class="d-inline" onsubmit="return confirm('Yakin ingin menghapus kelas {{ $k->nama_kelas }}?');">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Hapus Kelas">
-                                                <i class="bi bi-trash"></i> Hapus
+                                            <button type="submit" class="btn btn-sm btn-outline-danger shadow-sm" title="Hapus Kelas">
+                                                <i class="bi bi-trash"></i> <span class="d-none d-sm-inline">Hapus</span>
                                             </button>
                                         </form>
                                     </div>
@@ -133,7 +137,7 @@
                                         <form action="/kelas/{{ $k->id }}" method="POST">
                                             @csrf
                                             @method('PUT')
-                                            <div class="modal-body p-4">
+                                            <div class="modal-body p-3 p-md-4">
                                                 <div class="mb-3">
                                                     <label class="form-label text-muted small fw-semibold">Nama Kelas</label>
                                                     <input type="text" name="nama_kelas" class="form-control" value="{{ $k->nama_kelas }}" required>

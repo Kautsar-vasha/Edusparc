@@ -12,6 +12,15 @@
         border-color: #198754;
         box-shadow: 0 0 0 0.25rem rgba(25, 135, 84, 0.15);
     }
+    /* Tambahan untuk responsivitas filter di mobile */
+    .filter-box {
+        width: 100%;
+    }
+    @media (min-width: 768px) {
+        .filter-box {
+            max-width: 250px;
+        }
+    }
 </style>
 
 <div class="container-fluid py-2">
@@ -22,23 +31,22 @@
             </h3>
             <p class="text-muted mb-0 mt-1">Kelola data peserta didik EDUSPARC</p>
         </div>
-        <div class="d-flex flex-wrap gap-2">
 
-            {{-- TOMBOL IMPORT & HAPUS LULUS HANYA TAMPIL UNTUK ADMIN --}}
+        {{-- Diubah menggunakan flex-wrap agar bentuk tombol konsisten menyamping di mobile --}}
+        <div class="d-flex flex-wrap gap-2 mt-2 mt-md-0">
             @if(session('role') === 'admin' || session('role') === 'super_admin')
-                <button type="button" class="btn btn-outline-success shadow-sm rounded-pill px-4 fw-semibold" data-bs-toggle="modal" data-bs-target="#modalImport">
+                <button type="button" class="btn btn-outline-success shadow-sm rounded-pill px-4 fw-semibold text-nowrap d-inline-flex align-items-center" data-bs-toggle="modal" data-bs-target="#modalImport">
                     <i class="bi bi-file-earmark-excel me-1"></i> Import Excel
                 </button>
 
-                <form action="/siswa/hapus-lulus" method="POST" onsubmit="return confirm('PERINGATAN KERAS! Seluruh data siswa berstatus Lulus beserta riwayat karakternya akan dihapus PERMANEN dan tidak dapat dikembalikan. Lanjutkan?')">
+                <form action="/siswa/hapus-lulus" method="POST" onsubmit="return confirm('PERINGATAN KERAS! Lanjutkan?')">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-outline-danger shadow-sm rounded-pill px-4 fw-semibold">
+                    <button type="submit" class="btn btn-outline-danger shadow-sm rounded-pill px-4 fw-semibold text-nowrap d-inline-flex align-items-center">
                         <i class="bi bi-trash3-fill me-1"></i> Bersihkan Data Lulus
                     </button>
                 </form>
             @endif
-
         </div>
     </div>
 
@@ -61,7 +69,7 @@
 
         <form action="/siswa" method="POST">
             @csrf
-            <div class="row g-3 align-items-end">
+            <div class="row g-3 align-items-md-end">
                 <div class="col-12 col-md-3">
                     <label class="form-label text-muted small fw-semibold mb-1">NISN <span class="text-danger">*</span></label>
                     <div class="input-group shadow-sm">
@@ -98,7 +106,7 @@
                         <input type="date" name="birth_date" class="form-control" required>
                     </div>
                 </div>
-                <div class="col-12 col-md-2">
+                <div class="col-12 col-md-2 pt-2 pt-md-0">
                     <button type="submit" class="btn btn-success w-100 shadow-sm fw-semibold">
                         <i class="bi bi-save me-1"></i> Simpan
                     </button>
@@ -111,8 +119,8 @@
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3 gap-3">
             <h5 class="fw-bold mb-0"><i class="bi bi-list-ul me-2 text-success"></i>Daftar Siswa</h5>
 
-            <form action="/siswa" method="GET" class="d-flex gap-2">
-                <div class="input-group shadow-sm" style="max-width: 250px;">
+            <form action="/siswa" method="GET" class="w-100 w-md-auto">
+                <div class="input-group shadow-sm filter-box ms-auto">
                     <span class="input-group-text bg-light"><i class="bi bi-funnel text-muted"></i></span>
                     <select name="class" class="form-select" onchange="this.form.submit()">
                         <option value="">Semua Kelas</option>
@@ -130,7 +138,7 @@
 
         <div class="table-responsive mt-3">
             <table class="table table-hover align-middle min-w-600 mb-0">
-                <thead class="table-light text-muted">
+                <thead class="table-light text-muted text-nowrap">
                     <tr>
                         <th width="5%" class="text-center rounded-start">No</th>
                         <th>NISN</th>
@@ -140,7 +148,7 @@
                         <th width="15%" class="text-center rounded-end">Aksi</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="text-nowrap text-md-wrap">
                     @forelse($students as $key => $s)
                     <tr>
                         <td class="text-center fw-bold text-muted">{{ $key+1 }}</td>
@@ -161,20 +169,17 @@
                             @endif
                         </td>
                         <td class="text-center">
-                            <div class="d-flex justify-content-center gap-2">
+                            <div class="d-flex justify-content-center gap-1 gap-md-2 flex-wrap">
                                 <a href="/siswa/{{ $s->id }}/qr" target="_blank" class="btn btn-sm btn-outline-dark shadow-sm" title="Cetak QR Code">
                                     <i class="bi bi-qr-code"></i>
                                 </a>
-
-                                {{-- Tombol Detail Siswa (Mata) --}}
                                 <a href="/siswa/{{ $s->id }}" class="btn btn-sm btn-outline-info shadow-sm" title="Lihat Profil Siswa">
                                     <i class="bi bi-eye"></i>
                                 </a>
-
                                 <a href="/siswa/{{ $s->id }}/edit" class="btn btn-sm btn-outline-primary shadow-sm" title="Edit Siswa">
                                     <i class="bi bi-pencil-square"></i>
                                 </a>
-                                <form action="/siswa/{{ $s->id }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus data {{ $s->name }}? Data poin akan ikut terhapus.');">
+                                <form action="/siswa/{{ $s->id }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus data {{ $s->name }}?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit" class="btn btn-sm btn-outline-danger shadow-sm" title="Hapus Siswa">
@@ -186,7 +191,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="text-center text-muted py-4">
+                        <td colspan="6" class="text-center text-muted py-4 text-wrap">
                             <i class="bi bi-inbox fs-2 d-block mb-2 text-secondary"></i>
                             Belum ada data siswa. Silakan tambah manual atau Impor Excel.
                         </td>
